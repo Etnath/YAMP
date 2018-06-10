@@ -1,0 +1,28 @@
+name: yamp
+description: Yet Anoter Music Player
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+  audioplayer:
+  path_provider:
+  dart_tags:
+  flutter_launcher_icons:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter_icons:
+  image_path: "resources/YAMPLogoLetter.png"  
+
+# The following section is specific to Flutter.
+flutter:
+  uses-material-design: true
+
+  assets:
+    - resources/YAMPLogo.png
+    - resources/YAMPLogoLetter.png
