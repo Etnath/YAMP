@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:audioplayer/audioplayer.dart';
 
 import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
@@ -10,6 +11,7 @@ import 'models/music.dart';
 import 'services/musicLoader.dart';
 
 typedef MusicChanger(Music music);
+typedef MusicPlay();
 
 class YampApp extends StatefulWidget {
   @override
@@ -24,11 +26,15 @@ class YampAppState extends State<YampApp> {
   bool _isLoading;
   BuildContext _context;
   bool _needRestartSong;
-
+  AudioPlayer _audioPlayer;
+  bool _isPlaying;
+  
   @override
   void initState() {
     super.initState();
     _isLoading = true;
+    _audioPlayer = new AudioPlayer();
+    _isPlaying = false;
     viewDisplayed();
   }
 
@@ -102,7 +108,7 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_currentMusic, _needRestartSong)
+            new MusicPlayerView(_currentMusic, playMusic)
       },
     );
   }
@@ -123,10 +129,26 @@ class YampAppState extends State<YampApp> {
   void changeMusic(Music music) {
     if (_currentMusic == null || _currentMusic.path != music.path) {
       _currentMusic = music;
-      _needRestartSong = true;
-    } else {
+      _audioPlayer.stop(); //for some reasons the player needs to be stopped before loading a new song     
+    }
+    else {
       _needRestartSong = false;
     }
+
+    _isPlaying = true;
+    _audioPlayer.play(_currentMusic.path); 
+
     Navigator.pushNamed(_context, "/MusicPlayer");
+  }
+
+  void playMusic()
+  {
+    if(_isPlaying){
+      _audioPlayer.pause(); 
+      _isPlaying = false;
+    }else{
+      _audioPlayer.play(_currentMusic.path);
+      _isPlaying = true; 
+    }
   }
 }

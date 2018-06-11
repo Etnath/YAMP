@@ -2,43 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:audioplayer/audioplayer.dart';
 
 import '../models/music.dart';
+import '../app.dart';
 
 class MusicPlayerView extends StatefulWidget {
   final Music _music;
-  final bool _restartSong;
+  final MusicPlay _playMusic;
 
-  MusicPlayerView(this._music, this._restartSong);
+  MusicPlayerView(this._music, this._playMusic );
 
   @override
   State<StatefulWidget> createState() {
-    return MusicPlayerState(_music, _restartSong);
+    return MusicPlayerState(_music, this._playMusic);
   }
 }
 
 class MusicPlayerState extends State<MusicPlayerView> {
   bool _isPlaying;
   Music _music;
-  AudioPlayer _audioPlayer;
-  bool _restartSong;
+  final MusicPlay _playMusic;
 
-  MusicPlayerState(this._music, this._restartSong);
+  MusicPlayerState(this._music, this._playMusic);
 
   @override
   void initState() {
     super.initState();
 
-    if (_audioPlayer == null) {
-      _audioPlayer = new AudioPlayer();
-    }
-
     _isPlaying = true;
-
-    if (_restartSong) {
-      //Then the user selected a new song, we need to play it    
-      _audioPlayer.stop(); //for some reasons the player needs to be stopped before loading a new song
-     
-    }
-     _audioPlayer.play(_music.path);
   }
 
   @override
@@ -47,7 +36,7 @@ class MusicPlayerState extends State<MusicPlayerView> {
       body: new Center(
         child: new IconButton(
           icon: new Icon(Icons.play_circle_outline),
-          onPressed: _handlePlay,
+          onPressed: _playMusic,
         ),
       ),
     );
@@ -56,10 +45,8 @@ class MusicPlayerState extends State<MusicPlayerView> {
   void _handlePlay() {
     if (_isPlaying) {
       _isPlaying = false;
-      _audioPlayer.pause();
     } else {
       _isPlaying = true;
-      _audioPlayer.play(_music.path);
     }
   }
 }
