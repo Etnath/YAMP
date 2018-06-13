@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayer/audioplayer.dart';
 
+import '../models/ApplicationModel.dart';
 import '../models/music.dart';
 import '../app.dart';
 
 class MusicPlayerView extends StatefulWidget {
-  final Music _music;
   final MusicPlay _playMusic;
+  ApplicationModel _model;
 
-  MusicPlayerView(this._music, this._playMusic );
+  MusicPlayerView(this._model, this._playMusic);
 
   @override
   State<StatefulWidget> createState() {
-    return MusicPlayerState(_music, this._playMusic);
+    return MusicPlayerState(_model, this._playMusic);
   }
 }
 
 class MusicPlayerState extends State<MusicPlayerView> {
-  bool _isPlaying;
-  Music _music;
   final MusicPlay _playMusic;
+  Icon playIcon;
+  ApplicationModel _model;
 
-  MusicPlayerState(this._music, this._playMusic);
+  MusicPlayerState(this._model, this._playMusic);
 
   @override
   void initState() {
     super.initState();
 
-    _isPlaying = true;
+    
   }
 
   @override
@@ -35,18 +36,19 @@ class MusicPlayerState extends State<MusicPlayerView> {
     return new Scaffold(
       body: new Center(
         child: new IconButton(
-          icon: new Icon(Icons.play_circle_outline),
+          icon: getPlayIcon(),
           onPressed: _playMusic,
         ),
       ),
     );
   }
 
-  void _handlePlay() {
-    if (_isPlaying) {
-      _isPlaying = false;
-    } else {
-      _isPlaying = true;
+  Icon getPlayIcon()
+  {
+    if(_model.isPlaying){
+      return new Icon(Icons.pause);
     }
+
+    return new Icon(Icons.play_arrow);
   }
 }

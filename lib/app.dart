@@ -22,7 +22,6 @@ class YampApp extends StatefulWidget {
 }
 
 class YampAppState extends State<YampApp> {
-  List<Music> musics;
   BuildContext _context;
   AudioPlayer _audioPlayer;
   ApplicationModel _model;
@@ -41,7 +40,7 @@ class YampAppState extends State<YampApp> {
     switch (permissionState) {
       case PermissionState.GRANTED:
         loader.loadMusic().then((loadedMusic) {
-          musics = loadedMusic;
+          _model.musics = loadedMusic;
 
           setState(() {
             _model.isLoading = false;
@@ -105,7 +104,7 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_model.currentMusic, playMusic)
+            new MusicPlayerView(_model, playMusic)
       },
     );
   }
@@ -115,7 +114,7 @@ class YampAppState extends State<YampApp> {
       return new SplashScreen();
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
-      for (var music in musics) {
+      for (var music in _model.musics) {
         musicItems.add(new MusicItem(music, changeMusic));
       }
 
@@ -140,9 +139,15 @@ class YampAppState extends State<YampApp> {
     if(_model.isPlaying){
       _audioPlayer.pause(); 
       _model.isPlaying = false;
+      setState(() {
+              _model.isPlaying = false;
+            });
+      
     }else{
       _audioPlayer.play(_model.currentMusic.path);
-      _model.isPlaying = true; 
+      setState(() {
+              _model.isPlaying = true;
+            });
     }
   }
 }
