@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayer/audioplayer.dart';
 
+import 'models/ApplicationModel.dart';
 import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
 import 'widgets/musicList.dart';
@@ -22,19 +23,15 @@ class YampApp extends StatefulWidget {
 
 class YampAppState extends State<YampApp> {
   List<Music> musics;
-  Music _currentMusic;
-  bool _isLoading;
   BuildContext _context;
-  bool _needRestartSong;
   AudioPlayer _audioPlayer;
-  bool _isPlaying;
+  ApplicationModel _model;
   
   @override
   void initState() {
     super.initState();
-    _isLoading = true;
+    _model = new ApplicationModel();
     _audioPlayer = new AudioPlayer();
-    _isPlaying = false;
     viewDisplayed();
   }
 
@@ -47,7 +44,7 @@ class YampAppState extends State<YampApp> {
           musics = loadedMusic;
 
           setState(() {
-            _isLoading = false;
+            _model.isLoading = false;
           });
         });
         break;
@@ -108,13 +105,13 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_currentMusic, playMusic)
+            new MusicPlayerView(_model.currentMusic, playMusic)
       },
     );
   }
 
   Widget _buildBody() {
-    if (_isLoading) {
+    if (_model.isLoading) {
       return new SplashScreen();
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
@@ -127,28 +124,25 @@ class YampAppState extends State<YampApp> {
   }
 
   void changeMusic(Music music) {
-    if (_currentMusic == null || _currentMusic.path != music.path) {
-      _currentMusic = music;
+    if (_model.currentMusic == null || _model.currentMusic.path != music.path) {
+      _model.currentMusic = music;
       _audioPlayer.stop(); //for some reasons the player needs to be stopped before loading a new song     
     }
-    else {
-      _needRestartSong = false;
-    }
 
-    _isPlaying = true;
-    _audioPlayer.play(_currentMusic.path); 
+    _model.isPlaying = true;
+    _audioPlayer.play(_model.currentMusic.path); 
 
     Navigator.pushNamed(_context, "/MusicPlayer");
   }
 
   void playMusic()
   {
-    if(_isPlaying){
+    if(_model.isPlaying){
       _audioPlayer.pause(); 
-      _isPlaying = false;
+      _model.isPlaying = false;
     }else{
-      _audioPlayer.play(_currentMusic.path);
-      _isPlaying = true; 
+      _audioPlayer.play(_model.currentMusic.path);
+      _model.isPlaying = true; 
     }
   }
 }
