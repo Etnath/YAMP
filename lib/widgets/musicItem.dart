@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
-import '../models/music.dart';
-import '../views/musicPlayerView.dart';
+import '../models/song.dart';
 
 class MusicItem extends StatelessWidget {
-  final Music _music;
-  BuildContext _context;
+  final Song _song;
   final MusicChanger changeMusic;
 
-  MusicItem(this._music, this.changeMusic);
+  MusicItem(this._song, this.changeMusic);
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -26,11 +23,11 @@ class MusicItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 new Text(
-                  _music.name,
+                  _song.name,
                   style: new TextStyle(color: Theme.of(context).primaryColor),
                 ),
                 new Text(
-                  _music.singer,
+                  _song.singer,
                   style: Theme.of(context).textTheme.body1,
                 ),
               ],
@@ -45,6 +42,6 @@ class MusicItem extends StatelessWidget {
 
   _handleOnTap()
   {
-    changeMusic(_music);
+    changeMusic(_song);
   }
 }

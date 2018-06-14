@@ -8,10 +8,10 @@ import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
 import 'widgets/musicList.dart';
 import 'views/musicPlayerView.dart';
-import 'models/music.dart';
+import 'models/song.dart';
 import 'services/musicLoader.dart';
 
-typedef MusicChanger(Music music);
+typedef MusicChanger(Song song);
 typedef MusicPlay();
 
 class YampApp extends StatefulWidget {
@@ -40,7 +40,7 @@ class YampAppState extends State<YampApp> {
     switch (permissionState) {
       case PermissionState.GRANTED:
         loader.loadMusic().then((loadedMusic) {
-          _model.musics = loadedMusic;
+          _model.songs = loadedMusic;
 
           setState(() {
             _model.isLoading = false;
@@ -63,11 +63,11 @@ class YampAppState extends State<YampApp> {
       context: context,
       barrierDismissible: false, // user must tap button!
       child: new AlertDialog(
-        title: new Text('Contacts Permission'),
+        title: new Text('Read storage Permission'),
         content: new SingleChildScrollView(
           child: new ListBody(
             children: <Widget>[
-              new Text('We need this permission because ...'),
+              new Text('YAMP use this permission to access your music.'),
             ],
           ),
         ),
@@ -114,7 +114,7 @@ class YampAppState extends State<YampApp> {
       return new SplashScreen();
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
-      for (var music in _model.musics) {
+      for (var music in _model.songs) {
         musicItems.add(new MusicItem(music, changeMusic));
       }
 
@@ -122,14 +122,14 @@ class YampAppState extends State<YampApp> {
     }
   }
 
-  void changeMusic(Music music) {
-    if (_model.currentMusic == null || _model.currentMusic.path != music.path) {
-      _model.currentMusic = music;
+  void changeMusic(Song music) {
+    if (_model.currentSong == null || _model.currentSong.path != music.path) {
+      _model.currentSong = music;
       _audioPlayer.stop(); //for some reasons the player needs to be stopped before loading a new song     
     }
 
     _model.isPlaying = true;
-    _audioPlayer.play(_model.currentMusic.path); 
+    _audioPlayer.play(_model.currentSong.path); 
 
     Navigator.pushNamed(_context, "/MusicPlayer");
   }
@@ -144,7 +144,7 @@ class YampAppState extends State<YampApp> {
             });
       
     }else{
-      _audioPlayer.play(_model.currentMusic.path);
+      _audioPlayer.play(_model.currentSong.path);
       setState(() {
               _model.isPlaying = true;
             });

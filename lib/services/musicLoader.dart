@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dart_tags/dart_tags.dart';
 
-import '../models/music.dart';
+import '../models/song.dart';
 
 class MusicLoader {
   
@@ -28,27 +28,27 @@ class MusicLoader {
     return new Future.value(PermissionState.DENIED);
   }
 
-  Future<List<Music>> loadMusic() async {
+  Future<List<Song>> loadMusic() async {
     Directory root = await getExternalStorageDirectory();
     var musicPath = root.path + "/Music";
 
     Directory musicDirectory = new Directory(musicPath);
     var fileList = musicDirectory.listSync();
 
-    List<Music> musics = new List<Music>();
+    List<Song> musics = new List<Song>();
     for (var file in fileList) {
       if(file.path.toLowerCase().endsWith(".mp3"))
       {
-        Music music = await createMusic(file.path);
+        Song music = await createMusic(file.path);
         musics.add(music);
       }      
     }
 
-    musics.add(new Music("ddddd/ddddd/dddd/dddd/dd","wdadwadw",'rrr'));
+    musics.add(new Song("ddddd/ddddd/dddd/dddd/dd","wdadwadw",'rrr'));
     return musics;
   }
 
-  Future<Music> createMusic(String filePath) async{
+  Future<Song> createMusic(String filePath) async{
     File file = new File(filePath);
 
     var tags = await _tp.getTagsFromByteArray(file.readAsBytes());
@@ -67,12 +67,12 @@ class MusicLoader {
         {
             singer = tag.tags['artist'];
         }
-        return new Music(filePath, title, singer);
+        return new Song(filePath, title, singer);
       }
     }
 
     //No tags
-    return new Music(filePath, file.path.split('/').last.split('.').first, '');
+    return new Song(filePath, file.path.split('/').last.split('.').first, '');
   }
 }
 

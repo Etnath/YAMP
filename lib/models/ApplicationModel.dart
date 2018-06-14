@@ -1,16 +1,16 @@
-import 'music.dart';
+import 'song.dart';
 
 class ApplicationModel{
   bool isLoading;
   bool isPlaying;
-  Music currentMusic;
-  List<Music> musics;
+  Song currentSong;
+  List<Song> songs;
 
 
   ApplicationModel(){
     isLoading = true;
     isPlaying = false;
-    currentMusic = null;
-    musics = new List<Music>();
+    currentSong = null;
+    songs = new List<Song>();
   }
 }
