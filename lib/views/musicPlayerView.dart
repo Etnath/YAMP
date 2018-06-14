@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/ApplicationModel.dart';
-import '../app.dart';
+import '../controllers/AudioController.dart';
 
 class MusicPlayerView extends StatefulWidget {
   final MusicPlay _playMusic;

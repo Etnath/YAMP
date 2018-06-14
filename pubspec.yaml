@@ -10,6 +10,7 @@ dependencies:
   path_provider:
   dart_tags:
   flutter_launcher_icons:
+  dart_message_bus:
 
 dev_dependencies:
   flutter_test:

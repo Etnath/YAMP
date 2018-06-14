@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../app.dart';
+import '../controllers/AudioController.dart';
 import '../models/song.dart';
 
 class MusicItem extends StatelessWidget {

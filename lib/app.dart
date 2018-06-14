@@ -1,18 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:audioplayer/audioplayer.dart';
+import 'package:dart_message_bus/dart_message_bus.dart';
 
 import 'models/ApplicationModel.dart';
 import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
 import 'widgets/musicList.dart';
 import 'views/musicPlayerView.dart';
-import 'models/song.dart';
 import 'services/musicLoader.dart';
+import 'controllers/AudioController.dart';
 
-typedef MusicChanger(Song song);
-typedef MusicPlay();
+
+
 
 class YampApp extends StatefulWidget {
   @override
@@ -23,14 +23,17 @@ class YampApp extends StatefulWidget {
 
 class YampAppState extends State<YampApp> {
   BuildContext _context;
-  AudioPlayer _audioPlayer;
   ApplicationModel _model;
+  AudioController _audioController;
+  MessageBus _navigationBus;
   
   @override
   void initState() {
     super.initState();
     _model = new ApplicationModel();
-    _audioPlayer = new AudioPlayer();
+    _navigationBus = new MessageBus();
+    _navigationBus.subscribe("PushRoute", onPushRoute);
+    _audioController = new AudioController(_model, _navigationBus);
     viewDisplayed();
   }
 
@@ -104,7 +107,7 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_model, playMusic)
+            new MusicPlayerView(_model, _audioController.playMusic)
       },
     );
   }
@@ -115,39 +118,14 @@ class YampAppState extends State<YampApp> {
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
       for (var music in _model.songs) {
-        musicItems.add(new MusicItem(music, changeMusic));
+        musicItems.add(new MusicItem(music, _audioController.changeMusic));
       }
 
       return new MusicList(musicItems);
     }
   }
 
-  void changeMusic(Song music) {
-    if (_model.currentSong == null || _model.currentSong.path != music.path) {
-      _model.currentSong = music;
-      _audioPlayer.stop(); //for some reasons the player needs to be stopped before loading a new song     
-    }
-
-    _model.isPlaying = true;
-    _audioPlayer.play(_model.currentSong.path); 
-
-    Navigator.pushNamed(_context, "/MusicPlayer");
-  }
-
-  void playMusic()
-  {
-    if(_model.isPlaying){
-      _audioPlayer.pause(); 
-      _model.isPlaying = false;
-      setState(() {
-              _model.isPlaying = false;
-            });
-      
-    }else{
-      _audioPlayer.play(_model.currentSong.path);
-      setState(() {
-              _model.isPlaying = true;
-            });
-    }
+  onPushRoute(Message m){
+    Navigator.of(_context).pushNamed(m.data.toString());
   }
 }
