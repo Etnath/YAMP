@@ -41,4 +41,32 @@ class AudioController {
       _model.isPlaying = true;
     }
   }
+
+  void playNextSong()
+  {
+    int currentSongIndex = _model.songs.indexOf(_model.currentSong);
+    
+    Song nextSong;
+    if(currentSongIndex >= _model.songs.length){
+      nextSong = _model.songs[0];
+    } else {
+      nextSong = _model.songs[currentSongIndex + 1];
+    }
+
+    changeMusic(nextSong);
+  }
+
+  void playPreviousSong()
+  {
+    int currentSongIndex = _model.songs.indexOf(_model.currentSong);
+    
+    Song previousSong;
+    if(currentSongIndex <= 0){
+      previousSong = _model.songs[_model.songs.length - 1];
+    } else {
+      previousSong = _model.songs[currentSongIndex - 1];
+    }
+    
+    changeMusic(previousSong);
+  }
 }
