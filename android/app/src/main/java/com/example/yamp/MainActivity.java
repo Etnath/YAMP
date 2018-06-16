@@ -1,4 +1,4 @@
-package com.example.yamp;
+package etnath.yamp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
