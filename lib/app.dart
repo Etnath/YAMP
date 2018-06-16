@@ -126,6 +126,12 @@ class YampAppState extends State<YampApp> {
   }
 
   onPushRoute(Message m){
-    Navigator.of(_context).pushNamed(m.data.toString());
+    if(Navigator.canPop(context))
+    {
+      Navigator.of(_context).popAndPushNamed(m.data.toString());
+    }else{
+      Navigator.of(_context).pushNamed(m.data.toString());
+    }
+    
   }
 }

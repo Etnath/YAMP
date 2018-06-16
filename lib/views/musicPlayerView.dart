@@ -58,6 +58,10 @@ class MusicPlayerState extends State<MusicPlayerView> {
         children: <Widget>[
           new Container(
             margin: new EdgeInsets.symmetric(horizontal: 4.0),
+            child: getShuffleIconButton(),
+          ),
+          new Container(
+            margin: new EdgeInsets.symmetric(horizontal: 4.0),
             child: new IconButton(
               icon: new Icon(Icons.skip_previous),
               onPressed: _controller.playPreviousSong,
@@ -77,6 +81,10 @@ class MusicPlayerState extends State<MusicPlayerView> {
               onPressed: _controller.playNextSong,
             ),
           ),
+          new Container(
+            margin: new EdgeInsets.symmetric(horizontal: 4.0),
+            child: getRepeatIconButton(),
+          ),
         ],
       ),
     );
@@ -88,11 +96,55 @@ class MusicPlayerState extends State<MusicPlayerView> {
     });
   }
 
+  enableShuffle() {
+    setState(() {
+      _controller.enableShuffle();
+    });
+  }
+
+  enableRepeat() {
+    setState(() {
+      _controller.enableRepeat();
+    });
+  }
+
   Icon getPlayIcon() {
     if (_model.isPlaying) {
       return new Icon(Icons.pause);
     }
 
     return new Icon(Icons.play_arrow);
+  }
+
+  IconButton getShuffleIconButton() {
+    if (_model.isShuffle) {
+      return new IconButton(
+        color: Theme.of(context).accentColor,
+        icon: new Icon(Icons.shuffle),
+        onPressed: enableShuffle,
+      );
+    }
+
+    return new IconButton(
+      color: Theme.of(context).primaryColor,
+      icon: new Icon(Icons.shuffle),
+      onPressed: enableShuffle,
+    );
+  }
+
+  IconButton getRepeatIconButton() {
+    if (_model.isRepeat) {
+      return new IconButton(
+        color: Theme.of(context).accentColor,
+        icon: new Icon(Icons.repeat),
+        onPressed: enableRepeat,
+      );
+    }
+
+    return new IconButton(
+      color: Theme.of(context).primaryColor,
+      icon: new Icon(Icons.repeat),
+      onPressed: enableRepeat,
+    );
   }
 }
