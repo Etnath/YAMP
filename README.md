@@ -1,8 +1,10 @@
 # YAMP
 
-Yet Another Music Player.
+Yet Another Music Player. A simple local music player
 
-Made with Flutter.
+<img src="./resources/YAMPLogoLetter.png" height="50" />
+
+Powered by Flutter.
 
 ## Status
 
