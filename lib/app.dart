@@ -11,9 +11,6 @@ import 'views/musicPlayerView.dart';
 import 'services/musicLoader.dart';
 import 'controllers/AudioController.dart';
 
-
-
-
 class YampApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -26,10 +23,12 @@ class YampAppState extends State<YampApp> {
   ApplicationModel _model;
   AudioController _audioController;
   MessageBus _navigationBus;
-  
+  Stopwatch _stopwatch;
+
   @override
   void initState() {
     super.initState();
+    _stopwatch = new Stopwatch();
     _model = new ApplicationModel();
     _navigationBus = new MessageBus();
     _navigationBus.subscribe("PushRoute", onPushRoute);
@@ -45,9 +44,19 @@ class YampAppState extends State<YampApp> {
         loader.loadMusic().then((loadedMusic) {
           _model.songs = loadedMusic;
 
-          setState(() {
-            _model.isLoading = false;
-          });
+          if (_stopwatch.elapsedMilliseconds < 3000) {
+            //We wait to let a chancee to the splashscreen to be displayed. To be refactored later
+            Future.delayed(const Duration(milliseconds: 500)).then((dynamic) {
+              setState(() {
+                _model.isLoading = false;
+              });
+            });
+          } else {
+            setState(() {
+              _model.isLoading = false;
+            });
+          }
+          _stopwatch.stop();
         });
         break;
       case PermissionState.DENIED:
@@ -114,6 +123,7 @@ class YampAppState extends State<YampApp> {
 
   Widget _buildBody() {
     if (_model.isLoading) {
+      _stopwatch.start();
       return new SplashScreen();
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
@@ -125,13 +135,11 @@ class YampAppState extends State<YampApp> {
     }
   }
 
-  onPushRoute(Message m){
-    if(Navigator.canPop(context))
-    {
+  onPushRoute(Message m) {
+    if (Navigator.canPop(context)) {
       Navigator.of(_context).popAndPushNamed(m.data.toString());
-    }else{
+    } else {
       Navigator.of(_context).pushNamed(m.data.toString());
     }
-    
   }
 }
