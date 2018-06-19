@@ -1,5 +1,6 @@
 import 'package:audioplayer/audioplayer.dart';
 import 'dart:math';
+import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
 import '../models/song.dart';
@@ -14,27 +15,26 @@ typedef EnableRepeat();
 class AudioController {
   ApplicationModel _model;
   AudioPlayer _audioPlayer;
-  
+  MessageBus _messageBus;
 
-  AudioController(this._model) {
+  AudioController(this._model, this._messageBus) {
     _audioPlayer = new AudioPlayer();
+    _audioPlayer.onPlayerStateChanged.listen((onPlayerStateChanged));
   }
 
   void changeMusic(Song music) {
     if (_model.currentSong == null || _model.currentSong.path != music.path) {
       _model.currentSong = music;
-      _audioPlayer
-          .stop().whenComplete(startAudioPlayer); //for some reasons the player needs to be stopped before loading a new song
-    }
-    else{
+      _audioPlayer.stop().whenComplete(
+          startAudioPlayer); //for some reasons the player needs to be stopped before loading a new song
+    } else {
       startAudioPlayer();
     }
-       
   }
 
-  void startAudioPlayer(){
+  void startAudioPlayer() {
     _model.isPlaying = true;
-    _audioPlayer.play(_model.currentSong.path); 
+    _audioPlayer.play(_model.currentSong.path);
   }
 
   void playMusic() {
@@ -94,5 +94,13 @@ class AudioController {
 
   void enableShuffle() {
     _model.isShuffle = !_model.isShuffle;
+  }
+
+  void onPlayerStateChanged(AudioPlayerState state) 
+  {
+    if(state == AudioPlayerState.COMPLETED){
+      playNextSong();
+      _messageBus.publish(new Message("ModelChanged"));
+    }
   }
 }
