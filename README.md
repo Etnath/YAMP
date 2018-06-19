@@ -8,4 +8,8 @@ Powered by Flutter.
 
 ## Status
 
-Under development. Not alpha ready.
+### Android
+Closed Alpha. 
+
+### iOS
+Not ready.
