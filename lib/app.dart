@@ -32,7 +32,7 @@ class YampAppState extends State<YampApp> {
     _model = new ApplicationModel();
     _navigationBus = new MessageBus();
     _navigationBus.subscribe("PushRoute", onPushRoute);
-    _audioController = new AudioController(_model, _navigationBus);
+    _audioController = new AudioController(_model);
     viewDisplayed();
   }
 
@@ -45,7 +45,7 @@ class YampAppState extends State<YampApp> {
           _model.songs = loadedMusic;
 
           if (_stopwatch.elapsedMilliseconds < 3000) {
-            //We wait to let a chancee to the splashscreen to be displayed. To be refactored later
+            //We wait to let a chance to the splashscreen to be displayed. To be refactored later
             Future.delayed(const Duration(milliseconds: 500)).then((dynamic) {
               setState(() {
                 _model.isLoading = false;
@@ -128,7 +128,7 @@ class YampAppState extends State<YampApp> {
     } else {
       List<MusicItem> musicItems = new List<MusicItem>();
       for (var music in _model.songs) {
-        musicItems.add(new MusicItem(music, _audioController.changeMusic));
+        musicItems.add(new MusicItem(music, _audioController.changeMusic, _navigationBus));
       }
 
       return new MusicList(musicItems);

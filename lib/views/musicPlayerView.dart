@@ -64,7 +64,7 @@ class MusicPlayerState extends State<MusicPlayerView> {
             margin: new EdgeInsets.symmetric(horizontal: 4.0),
             child: new IconButton(
               icon: new Icon(Icons.skip_previous),
-              onPressed: _controller.playPreviousSong,
+              onPressed: playPreviousSong,
             ),
           ),
           new Container(
@@ -78,7 +78,7 @@ class MusicPlayerState extends State<MusicPlayerView> {
             margin: new EdgeInsets.symmetric(horizontal: 4.0),
             child: new IconButton(
               icon: new Icon(Icons.skip_next),
-              onPressed: _controller.playNextSong,
+              onPressed: playNextSong,
             ),
           ),
           new Container(
@@ -105,6 +105,18 @@ class MusicPlayerState extends State<MusicPlayerView> {
   enableRepeat() {
     setState(() {
       _controller.enableRepeat();
+    });
+  }
+
+  playPreviousSong() {
+    setState(() {
+      _controller.playPreviousSong();
+    });
+  }
+
+  playNextSong() {
+    setState(() {
+      _controller.playNextSong();
     });
   }
 

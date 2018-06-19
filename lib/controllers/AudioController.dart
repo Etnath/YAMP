@@ -1,5 +1,4 @@
 import 'package:audioplayer/audioplayer.dart';
-import 'package:dart_message_bus/dart_message_bus.dart';
 import 'dart:math';
 
 import '../models/ApplicationModel.dart';
@@ -15,9 +14,9 @@ typedef EnableRepeat();
 class AudioController {
   ApplicationModel _model;
   AudioPlayer _audioPlayer;
-  MessageBus _navigationBus;
+  
 
-  AudioController(this._model, this._navigationBus) {
+  AudioController(this._model) {
     _audioPlayer = new AudioPlayer();
   }
 
@@ -25,12 +24,17 @@ class AudioController {
     if (_model.currentSong == null || _model.currentSong.path != music.path) {
       _model.currentSong = music;
       _audioPlayer
-          .stop(); //for some reasons the player needs to be stopped before loading a new song
+          .stop().whenComplete(startAudioPlayer); //for some reasons the player needs to be stopped before loading a new song
     }
+    else{
+      startAudioPlayer();
+    }
+       
+  }
 
+  void startAudioPlayer(){
     _model.isPlaying = true;
-    _audioPlayer.play(_model.currentSong.path);
-    _navigationBus.publish(new Message("PushRoute", data: "/MusicPlayer"));
+    _audioPlayer.play(_model.currentSong.path); 
   }
 
   void playMusic() {
