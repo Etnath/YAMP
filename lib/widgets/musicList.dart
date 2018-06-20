@@ -10,10 +10,23 @@ class MusicList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new ListView.builder(
-      padding: new EdgeInsets.all(8.0),
-      itemBuilder: (_, int index) => _musicItems[index],
-      itemCount: _musicItems.length,
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        new AppBar(
+          title: new Text("Music List"),
+          leading: new Container(
+            margin: const EdgeInsets.fromLTRB(12.0, 8.0, 0.0, 8.0),
+            child: Image.asset('resources/YAMPLogoLetter.png'),
+          ),
+        ),
+        new Flexible(
+          child: new ListView.builder(
+            itemBuilder: (_, int index) => _musicItems[index],
+            itemCount: _musicItems.length,
+          ),
+        ),
+      ],
     );
   }
 }

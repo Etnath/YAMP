@@ -19,7 +19,8 @@ class MusicItem extends StatelessWidget {
         new GestureDetector(
           onTap: _handleOnTap,
           child: new Container(
-          margin: const EdgeInsets.only(top: 5.0),
+          margin: const EdgeInsets.only(top: 2.0),
+          decoration: new BoxDecoration(color: Theme.of(context).cardColor),
           child: new ListTile(
             title: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -64,7 +64,7 @@ class MusicLoader {
     }
   }
 
-  Future<List<Song>> saveCachedSongs() async {
+  void saveCachedSongs() async {
     final directory = await getApplicationDocumentsDirectory();
 
     var file = new File(directory.path + "/cachedSong.json");
