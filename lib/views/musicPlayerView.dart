@@ -34,7 +34,19 @@ class MusicPlayerState extends State<MusicPlayerView> {
         children: <Widget>[
           new Expanded(
             child: new Center(
-              child: new Text(_model.currentSong.name),
+              child: new Container(
+                margin: const EdgeInsets.symmetric(vertical: 50.0),
+                child: new Column(
+                  children: <Widget>[
+                    new Text(_model.currentSong.name,
+                        style: Theme.of(context).textTheme.title),
+                    new Text(_model.currentSong.singer,
+                        style: Theme.of(context).textTheme.subhead),
+                    new Text(_model.currentSong.album,
+                        style: Theme.of(context).textTheme.body1),
+                  ],
+                ),
+              ),
             ),
           ),
           new Divider(height: 1.0),

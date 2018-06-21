@@ -36,7 +36,7 @@ class MusicLoader {
     Directory musicDirectory = new Directory(musicPath);
     var fileList = musicDirectory.listSync();
 
-    await loadCachedSongs();
+    loadCachedSongs();
 
     List<Song> musics = new List<Song>();
     for (var file in fileList) {
@@ -51,7 +51,7 @@ class MusicLoader {
     return musics;
   }
 
-  Future<void> loadCachedSongs() async {
+  void loadCachedSongs() async {
     final directory = await getApplicationDocumentsDirectory();
 
     _cachedSongs = new List<Song>();
@@ -94,6 +94,7 @@ class MusicLoader {
       if (tag.tags.length > 0) {
         String title = '';
         String singer = '';
+        String album = '';
 
         if (tag.tags.containsKey('title') &&
             tag.tags['title'].toString().length > 0) {
@@ -106,16 +107,20 @@ class MusicLoader {
           singer = tag.tags['artist'];
         }
 
-        var song = new Song(filePath, title, singer);
+        if (tag.tags.containsKey('album')) {
+          album = tag.tags['album'];
+        }
+
+        var song = new Song(filePath, title, singer, album);
         _cachedSongs.add(song);
 
-        return new Song(filePath, title, singer);
+        return new Song(filePath, title, singer, album);
       }
     }
 
     //No tags
     var song =
-        new Song(filePath, file.path.split('/').last.split('.').first, '');
+        new Song(filePath, file.path.split('/').last.split('.').first, '', '');
     _cachedSongs.add(song);
     return song;
   }

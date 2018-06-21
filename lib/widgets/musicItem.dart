@@ -33,6 +33,10 @@ class MusicItem extends StatelessWidget {
                   _song.singer,
                   style: Theme.of(context).textTheme.body1,
                 ),
+                new Text(
+                  _song.album,
+                  style: Theme.of(context).textTheme.body1,
+                ),
               ],
             ),
           ),
