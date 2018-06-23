@@ -107,8 +107,8 @@ class YampAppState extends State<YampApp> {
           brightness: Brightness.dark,
           primarySwatch: Colors.teal,
           primaryColor: const Color(0xff89FFDF), //39FFCA
-          accentColor: const Color(0xfFFF4545),
-          backgroundColor: const Color(0xff404040)),
+          accentColor: const Color(0xfFFF6868),
+          backgroundColor: const Color(0xff4b4b4b)),
       home: new Scaffold(
         body: new Builder(builder: (BuildContext context) {
           _context = context;

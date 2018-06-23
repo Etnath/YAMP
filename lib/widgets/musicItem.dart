@@ -5,11 +5,11 @@ import '../controllers/AudioController.dart';
 import '../models/song.dart';
 
 class MusicItem extends StatelessWidget {
-  final Song _song;
+  final Song song;
   final MusicChanger changeMusic;
   final MessageBus _navigationBus;
 
-  MusicItem(this._song, this.changeMusic, this._navigationBus);
+  MusicItem(this.song, this.changeMusic, this._navigationBus);
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +26,15 @@ class MusicItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 new Text(
-                  _song.name,
+                  song.name,
                   style: new TextStyle(color: Theme.of(context).primaryColor),
                 ),
                 new Text(
-                  _song.singer,
+                  song.singer,
                   style: Theme.of(context).textTheme.body1,
                 ),
                 new Text(
-                  _song.album,
+                  song.album,
                   style: Theme.of(context).textTheme.body1,
                 ),
               ],
@@ -49,7 +49,7 @@ class MusicItem extends StatelessWidget {
 
   _handleOnTap()
   {
-    changeMusic(_song);
+    changeMusic(song);
     _navigationBus.publish(new Message("PushRoute", data: "/MusicPlayer"));
   }
 }
