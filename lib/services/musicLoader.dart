@@ -34,13 +34,14 @@ class MusicLoader {
     var musicPath = root.path + "/Music";
 
     Directory musicDirectory = new Directory(musicPath);
-    var fileList = musicDirectory.listSync();
+    var fileList = musicDirectory.listSync(recursive: true);
 
     loadCachedSongs();
 
     List<Song> musics = new List<Song>();
     for (var file in fileList) {
-      if (file.path.toLowerCase().endsWith(".mp3")) {
+      if (file.path.toLowerCase().endsWith(".mp3")
+      || file.path.toLowerCase().endsWith(".m4a")) {
         Song music = await createMusic(file.path);
         musics.add(music);
       }
