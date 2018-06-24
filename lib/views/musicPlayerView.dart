@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
 import '../controllers/AudioController.dart';
+import '../widgets/musicProgressBar.dart';
 
 class MusicPlayerView extends StatefulWidget {
   final ApplicationModel _model;
   final AudioController _controller;
+  final MessageBus _messageBus;
 
-  MusicPlayerView(this._model, this._controller);
+  MusicPlayerView(this._model, this._controller, this._messageBus);
 
   @override
   State<StatefulWidget> createState() {
-    return MusicPlayerState(_model, this._controller);
+    return MusicPlayerState(_model, this._controller, this._messageBus);
   }
 }
 
 class MusicPlayerState extends State<MusicPlayerView> {
-  Icon playIcon;
   ApplicationModel _model;
-  AudioController _controller;
+  final AudioController _controller;
+  final MessageBus _messageBus; 
 
-  MusicPlayerState(this._model, this._controller);
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  MusicPlayerState(this._model, this._controller, this._messageBus);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +47,7 @@ class MusicPlayerState extends State<MusicPlayerView> {
               ),
             ),
           ),
-          new Divider(height: 1.0),
+          new MusicProgressBar(_messageBus),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: new Container(

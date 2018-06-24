@@ -117,7 +117,7 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_model, _audioController)
+            new MusicPlayerView(_model, _audioController, _messageBus)
       },
     );
   }
