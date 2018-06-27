@@ -7,6 +7,8 @@ class ApplicationModel{
   bool isShuffle;
   Song currentSong;
   List<Song> songs;
+  Map<String, List<Song>> songsGroupedBySinger;
+  Map<String, List<Song>> songsGroupedByAlbum;
 
 
   ApplicationModel(){
@@ -16,5 +18,7 @@ class ApplicationModel{
     isShuffle = false;
     currentSong = null;
     songs = new List<Song>();
+    songsGroupedBySinger = new Map<String, List<Song>>();
+    songsGroupedByAlbum = new Map<String, List<Song>>();
   }
 }

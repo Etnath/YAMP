@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:audioplayer/audioplayer.dart';
 import 'dart:math';

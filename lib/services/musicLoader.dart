@@ -40,8 +40,8 @@ class MusicLoader {
 
     List<Song> musics = new List<Song>();
     for (var file in fileList) {
-      if (file.path.toLowerCase().endsWith(".mp3")
-      || file.path.toLowerCase().endsWith(".m4a")) {
+      if (file.path.toLowerCase().endsWith(".mp3") ||
+          file.path.toLowerCase().endsWith(".m4a")) {
         Song music = await createMusic(file.path);
         musics.add(music);
       }
@@ -59,8 +59,18 @@ class MusicLoader {
     var file = new File(directory.path + "/cachedSong.json");
     if (file.existsSync()) {
       List<dynamic> songs = json.decode(file.readAsStringSync());
-      for (var song in songs) {
-        _cachedSongs.add(new Song.fromJson(song));
+      for (var songJson in songs) {
+        Song song = new Song.fromJson(songJson);
+
+        //Cached songs generated with YAMP < v0.3 may generate empty fields, we need replace to replace them.
+        if (song.singer == '') {
+          song.singer = 'Unknown';
+        }
+
+        if (song.album == '') {
+          song.album = 'Unknown';
+        }
+        _cachedSongs.add(song);
       }
     }
   }
@@ -81,10 +91,10 @@ class MusicLoader {
   Future<Song> createMusic(String filePath) async {
     File file = new File(filePath);
 
-    if (_cachedSongs != null 
-      && _cachedSongs.any((cachedSong) {
-      return cachedSong.path == filePath;
-    })) {
+    if (_cachedSongs != null &&
+        _cachedSongs.any((cachedSong) {
+          return cachedSong.path == filePath;
+        })) {
       return _cachedSongs.firstWhere((cachedSong) {
         return cachedSong.path == filePath;
       });
@@ -93,9 +103,9 @@ class MusicLoader {
     var tags = await _tp.getTagsFromByteArray(file.readAsBytes());
     for (var tag in tags) {
       if (tag.tags.length > 0) {
-        String title = '';
-        String singer = '';
-        String album = '';
+        String title = 'Unknown';
+        String singer = 'Unknown';
+        String album = 'Unknown';
 
         if (tag.tags.containsKey('title') &&
             tag.tags['title'].toString().length > 0) {
@@ -120,8 +130,8 @@ class MusicLoader {
     }
 
     //No tags
-    var song =
-        new Song(filePath, file.path.split('/').last.split('.').first, '', '');
+    var song = new Song(filePath, file.path.split('/').last.split('.').first,
+        'Unknown', 'Unknown');
     _cachedSongs.add(song);
     return song;
   }
