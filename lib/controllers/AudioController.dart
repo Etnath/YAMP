@@ -64,12 +64,12 @@ class AudioController {
           int i = new Random().nextInt(_model.songs.length - 1);
           nextSong = _model.songs[i];
         } else {
-          int currentSongIndex = _model.songs.indexOf(_model.currentSong);
+          int currentSongIndex = _model.currentPlaylist.indexOf(_model.currentSong);
     
-          if (currentSongIndex >= _model.songs.length) {
-            nextSong = _model.songs[0];
+          if (currentSongIndex >= (_model.currentPlaylist.length - 1)) {
+            nextSong = _model.currentPlaylist[0];
           } else {
-            nextSong = _model.songs[currentSongIndex + 1];
+            nextSong = _model.currentPlaylist[currentSongIndex + 1];
           }
         }
     
@@ -83,12 +83,12 @@ class AudioController {
         }
     
         Song previousSong;
-        int currentSongIndex = _model.songs.indexOf(_model.currentSong);
+        int currentSongIndex = _model.currentPlaylist.indexOf(_model.currentSong);
     
         if (currentSongIndex <= 0) {
-          previousSong = _model.songs[_model.songs.length - 1];
+          previousSong = _model.currentPlaylist[_model.currentPlaylist.length - 1];
         } else {
-          previousSong = _model.songs[currentSongIndex - 1];
+          previousSong = _model.currentPlaylist[currentSongIndex - 1];
         }
     
         changeMusic(previousSong);

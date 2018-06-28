@@ -3,13 +3,15 @@ import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../controllers/AudioController.dart';
 import '../models/song.dart';
+import '../models/Constants.dart';
 
 class MusicItem extends StatelessWidget {
   final Song song;
+  final List<Song> _playlist;
   final MusicChanger changeMusic;
   final MessageBus _navigationBus;
 
-  MusicItem(this.song, this.changeMusic, this._navigationBus);
+  MusicItem(this.song, this._playlist, this.changeMusic, this._navigationBus);
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,6 @@ class MusicItem extends StatelessWidget {
   _handleOnTap()
   {
     changeMusic(song);
-    _navigationBus.publish(new Message("PushRoute", data: "/MusicPlayer"));
+    _navigationBus.publish(new Message(MessageNames.pushMusicPlayer, data: _playlist));
   }
 }

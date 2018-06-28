@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'musicItem.dart';
 import 'artistItem.dart';
+import 'albumItem.dart';
 import '../models/song.dart';
 import '../models/ApplicationModel.dart';
 import '../controllers/AudioController.dart';
@@ -27,19 +28,28 @@ class MusicListState extends State<MusicList> {
 
   List<MusicItem> _musicItems;
   List<ArtistItem> _artistItems;
+  List<AlbumItem> _albumItems;
   SortMode _sortMode;
 
   MusicListState(this._model, this._audioController, this._messageBus) {
     _musicItems = new List<MusicItem>();
     _artistItems = new List<ArtistItem>();
+    _albumItems = new List<AlbumItem>();
+
+    _model.songs.sort((a, b) => a.name.compareTo(b.name));
+    
     for (var music in _model.songs) {
       _musicItems
-          .add(new MusicItem(music, _audioController.changeMusic, _messageBus));
+          .add(new MusicItem(music, _model.songs, _audioController.changeMusic, _messageBus));
     }
     _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
 
     _model.songsGroupedBySinger.forEach(_initArtistItem);
     _artistItems.sort((a, b) => a.artist.compareTo(b.artist));
+
+    _model.songsGroupedByAlbum.forEach(_initAlbumItem);
+    _albumItems.sort((a, b) => a.album.compareTo(b.album));
+
     _sortMode = SortMode.TITLE;
   }
 
@@ -85,22 +95,34 @@ class MusicListState extends State<MusicList> {
     switch (_sortMode) {
       case SortMode.ARTISTS:
         return _buildArtistList();
+      case SortMode.ALBUMS:
+        return _buildAlbumList();
       default:
         return _buildTitleList();
     }
   }
 
   Widget _buildTitleList() {
-    return new ListView.builder(
-      itemBuilder: (_, int index) => _musicItems[index],
-      itemCount: _musicItems.length,
+    return new GestureDetector(
+      onTap: onListTap,
+      child: new ListView.builder(
+        itemBuilder: (_, int index) => _musicItems[index],
+        itemCount: _musicItems.length,
+      ),
     );
   }
 
   Widget _buildArtistList() {
     return new ListView.builder(
       itemBuilder: (_, int index) => _artistItems[index],
-      itemCount: _musicItems.length,
+      itemCount: _artistItems.length,
+    );
+  }
+
+  Widget _buildAlbumList() {
+    return new ListView.builder(
+      itemBuilder: (_, int index) => _albumItems[index],
+      itemCount: _albumItems.length,
     );
   }
 
@@ -175,6 +197,14 @@ class MusicListState extends State<MusicList> {
 
   void _initArtistItem(String key, List<Song> value) {
     _artistItems.add(new ArtistItem(key, value, _messageBus));
+  }
+
+  void _initAlbumItem(String key, List<Song> value) {
+    _albumItems.add(new AlbumItem(key, value, _messageBus));
+  }
+
+  void onListTap() {
+    _model.currentPlaylist = _model.songs;
   }
 }
 
