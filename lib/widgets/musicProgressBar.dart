@@ -33,9 +33,29 @@ class MusicProgressBarState extends State<MusicProgressBar> {
       onTapDown: onProgressBarTapDown,
       child: new Column(
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(_progressText),
+          new Stack(
+            children: <Widget>[
+              new Column(
+                children: <Widget>[
+                  //Hack: the three following bar are just here to expand the area of the gesture detector. To refactor later.
+                  new LinearProgressIndicator(
+                    value: 0.0,
+                    backgroundColor: Theme.of(context).canvasColor,
+                  ),
+                  new LinearProgressIndicator(
+                    value: 0.0,
+                    backgroundColor: Theme.of(context).canvasColor,
+                  ),
+                  new LinearProgressIndicator(
+                    value: 0.0,
+                    backgroundColor: Theme.of(context).canvasColor,
+                  )
+                ],
+              ),
+              new Center(
+                child: Text(_progressText),
+              ),
+            ],
           ),
           new LinearProgressIndicator(
             value: _progress,
@@ -48,13 +68,15 @@ class MusicProgressBarState extends State<MusicProgressBar> {
   void onProgressChanged(Message message) {
     _currentSongPosition = message.data;
 
-    setState(() {
-      _progress = _currentSongPosition.inMilliseconds /
-          _currentSongLength.inMilliseconds;
-      _progressText = formatDuration(_currentSongPosition) +
-          " / " +
-          formatDuration(_currentSongLength);
-    });
+    if (this.mounted) {
+      setState(() {
+        _progress = _currentSongPosition.inMilliseconds /
+            _currentSongLength.inMilliseconds;
+        _progressText = formatDuration(_currentSongPosition) +
+            " / " +
+            formatDuration(_currentSongLength);
+      });
+    }
   }
 
   void onCurrentSongChanged(Message message) {
