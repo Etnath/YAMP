@@ -134,7 +134,10 @@ class YampAppState extends State<YampApp> {
       _stopwatch.start();
       return new SplashScreen();
     } else {
-      return new MusicList(_model, _audioController, _messageBus);
+      return new WillPopScope(
+        onWillPop: onWillPop,
+        child: new MusicList(_model, _audioController, _messageBus),
+      );
     }
   }
 
@@ -178,5 +181,11 @@ class YampAppState extends State<YampApp> {
 
     Navigator.of(_context).push(new MaterialPageRoute(
         builder: (context) => new PlayList(musicItems, album)));
+  }
+
+  //Audio controller is not disposed when the application is destroyed. To refactor by listening to lifecycle events later
+  Future<bool> onWillPop() {
+    _audioController.dispose();
+    return new Future(() => true);
   }
 }

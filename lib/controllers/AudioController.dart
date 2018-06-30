@@ -122,4 +122,8 @@ class AudioController {
         double seconds = message.data * _audioPlayer.duration.inSeconds;
         _audioPlayer.seek(seconds);
   }
+
+  void dispose() {
+    _audioPlayer.stop();
+  }
 }
