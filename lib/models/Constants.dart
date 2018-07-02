@@ -4,3 +4,8 @@ class MessageNames{
   static const String pushAlbum = "Push/Album";
   static const String modelChanged = "ModelChanged";
 }
+
+class LocalPath{
+  static const String cachedSongs = "/cachedSong.json";
+  static const String playlists = "/playlists.json";
+}

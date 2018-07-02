@@ -1,4 +1,5 @@
 import 'song.dart';
+import 'playlist.dart';
 
 import '../utilities/helper.dart';
 
@@ -12,6 +13,7 @@ class ApplicationModel {
   List<Song> currentPlaylist;
   Map<String, List<Song>> songsGroupedBySinger;
   Map<String, List<Song>> songsGroupedByAlbum;
+  List<Playlist> playLists;
 
   ApplicationModel() {
     isLoading = true;
@@ -21,6 +23,7 @@ class ApplicationModel {
     currentSong = null;
     songs = new List<Song>();
     currentPlaylist = new List<Song>();
+    playLists = new List<Playlist>();
     songsGroupedBySinger = new Map<String, List<Song>>();
     songsGroupedByAlbum = new Map<String, List<Song>>();
   }
