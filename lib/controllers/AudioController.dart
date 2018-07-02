@@ -5,6 +5,7 @@ import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
 import '../models/song.dart';
+import '../models/constants.dart';
 
 typedef MusicChanger(Song song);
 typedef MusicPlay();
@@ -24,7 +25,7 @@ class AudioController {
     _audioPlayer.onPlayerStateChanged.listen((onPlayerStateChanged));
     _audioPlayer.onAudioPositionChanged.listen(onAudioPositionChanged);
     _currentSongDuration = new Duration();
-    _messageBus.subscribe("music/seek", onSeekRequest);
+    _messageBus.subscribe(MessageNames.musicSeek, onSeekRequest);
       }
     
       void changeMusic(Song music) {

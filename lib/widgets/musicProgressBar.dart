@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import '../models/constants.dart';
 
 class MusicProgressBar extends StatefulWidget {
   final MessageBus _messageBus;
@@ -106,6 +107,6 @@ class MusicProgressBarState extends State<MusicProgressBar> {
     var tapPos = box.globalToLocal(details.globalPosition);
     var width = box.size.width;
     var seekPercentage = tapPos.dx / width;
-    _messageBus.publish(new Message("music/seek", data: seekPercentage));
+    _messageBus.publish(new Message(MessageNames.musicSeek, data: seekPercentage));
   }
 }
