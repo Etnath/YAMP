@@ -15,3 +15,8 @@ class LocalPath{
   static const String cachedSongs = "/cachedSong.json";
   static const String playlists = "/playlists.json";
 }
+
+class DefaultPlaylistNames{
+  static const String favorites = "Favorites";
+  static const String recents = "Recents";
+}
