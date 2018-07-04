@@ -8,6 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dart_tags/dart_tags.dart';
 
 import '../models/song.dart';
+import '../models/playlist.dart';
+import '../models/constants.dart';
 
 class MusicLoader {
   static const _methodChannel = const MethodChannel('read');
@@ -32,7 +34,7 @@ class MusicLoader {
   Future<List<Song>> loadMusic() async {
     Directory root = await getExternalStorageDirectory();
     var musicPath = root.path + "/Music";
-
+    
     Directory musicDirectory = new Directory(musicPath);
     var fileList = musicDirectory.listSync(recursive: true);
 
@@ -56,7 +58,7 @@ class MusicLoader {
     final directory = await getApplicationDocumentsDirectory();
 
     _cachedSongs = new List<Song>();
-    var file = new File(directory.path + "/cachedSong.json");
+    var file = new File(directory.path + LocalPath.cachedSongs);
     if (file.existsSync()) {
       List<dynamic> songs = json.decode(file.readAsStringSync());
       for (var songJson in songs) {
@@ -78,9 +80,9 @@ class MusicLoader {
   void saveCachedSongs() async {
     final directory = await getApplicationDocumentsDirectory();
 
-    var file = new File(directory.path + "/cachedSong.json");
+    var file = new File(directory.path + LocalPath.cachedSongs);
     if (directory.listSync().any((file) {
-      return file.path == (directory.path + "/cachedSong.json");
+      return file.path == (directory.path + LocalPath.cachedSongs);
     })) {
       file.deleteSync();
     }
