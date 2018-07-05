@@ -8,11 +8,13 @@ import 'models/song.dart';
 import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
 import 'widgets/musicList.dart';
-import 'widgets/playlist.dart';
+import 'widgets/playlistWidget.dart';
 import 'views/musicPlayerView.dart';
 import 'services/musicLoader.dart';
+import 'services/playlistLoader.dart';
 import 'controllers/AudioController.dart';
 import 'models/Constants.dart';
+import 'models/playlist.dart';
 
 class YampApp extends StatefulWidget {
   @override
@@ -35,10 +37,7 @@ class YampAppState extends State<YampApp> {
     _model = new ApplicationModel();
     _messageBus = new MessageBus();
 
-    _messageBus.subscribe(MessageNames.pushMusicPlayer, onPushMusicPlayer);
-    _messageBus.subscribe(MessageNames.modelChanged, onModelChanged);
-    _messageBus.subscribe(MessageNames.pushArtist, onPushArtist);
-    _messageBus.subscribe(MessageNames.pushAlbum, onPushAlbum);
+    _subscribe();
 
     _audioController = new AudioController(_model, _messageBus);
     viewDisplayed();
@@ -52,19 +51,24 @@ class YampAppState extends State<YampApp> {
         loader.loadMusic().then((loadedMusic) {
           _model.init(loadedMusic);
 
-          if (_stopwatch.elapsedMilliseconds < 3000) {
-            //We wait to let a chance to the splashscreen to be displayed. To be refactored later
-            Future.delayed(const Duration(milliseconds: 500)).then((dynamic) {
+          PlaylistLoader playlistLoader = new PlaylistLoader();
+          playlistLoader.loadPlaylists().then((playlists) {
+            _model.playLists = playlists;
+
+            if (_stopwatch.elapsedMilliseconds < 3000) {
+              //We wait to let a chance to the splashscreen to be displayed. To be refactored later
+              Future.delayed(const Duration(milliseconds: 500)).then((dynamic) {
+                setState(() {
+                  _model.isLoading = false;
+                });
+              });
+            } else {
               setState(() {
                 _model.isLoading = false;
               });
-            });
-          } else {
-            setState(() {
-              _model.isLoading = false;
-            });
-          }
-          _stopwatch.stop();
+            }
+            _stopwatch.stop();
+          });
         });
         break;
       case PermissionState.DENIED:
@@ -165,7 +169,7 @@ class YampAppState extends State<YampApp> {
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
-        builder: (context) => new PlayList(musicItems, artist)));
+        builder: (context) => new PlayListWidget(musicItems, artist)));
   }
 
   void onPushAlbum(Message message) {
@@ -180,12 +184,33 @@ class YampAppState extends State<YampApp> {
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
-        builder: (context) => new PlayList(musicItems, album)));
+        builder: (context) => new PlayListWidget(musicItems, album)));
+  }
+
+  void onPushPlaylist(Message message) {
+    Playlist playList = message.data;
+
+    var musicItems = new List<MusicItem>();
+    for (var song in playList.songs) {
+      musicItems.add(new MusicItem(
+          song, playList.songs, _audioController.changeMusic, _messageBus));
+    }
+
+    Navigator.of(_context).push(new MaterialPageRoute(
+        builder: (context) => new PlayListWidget(musicItems, playList.title)));
   }
 
   //Audio controller is not disposed when the application is destroyed. To refactor by listening to lifecycle events later
   Future<bool> onWillPop() {
     _audioController.dispose();
     return new Future(() => true);
+  }
+
+  void _subscribe() {
+    _messageBus.subscribe(MessageNames.pushMusicPlayer, onPushMusicPlayer);
+    _messageBus.subscribe(MessageNames.modelChanged, onModelChanged);
+    _messageBus.subscribe(MessageNames.pushArtist, onPushArtist);
+    _messageBus.subscribe(MessageNames.pushAlbum, onPushAlbum);
+    _messageBus.subscribe(MessageNames.pushPlaylist, onPushPlaylist);
   }
 }

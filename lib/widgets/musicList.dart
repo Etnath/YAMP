@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'musicItem.dart';
 import 'artistItem.dart';
 import 'albumItem.dart';
+import 'playlistItem.dart';
 import '../models/song.dart';
 import '../models/ApplicationModel.dart';
 import '../controllers/AudioController.dart';
@@ -29,18 +30,20 @@ class MusicListState extends State<MusicList> {
   List<MusicItem> _musicItems;
   List<ArtistItem> _artistItems;
   List<AlbumItem> _albumItems;
+  List<PlaylistItem> _playlistItems;
   SortMode _sortMode;
 
   MusicListState(this._model, this._audioController, this._messageBus) {
     _musicItems = new List<MusicItem>();
     _artistItems = new List<ArtistItem>();
     _albumItems = new List<AlbumItem>();
+    _playlistItems = new List<PlaylistItem>();
 
     _model.songs.sort((a, b) => a.name.compareTo(b.name));
-    
+
     for (var music in _model.songs) {
-      _musicItems
-          .add(new MusicItem(music, _model.songs, _audioController.changeMusic, _messageBus));
+      _musicItems.add(new MusicItem(
+          music, _model.songs, _audioController.changeMusic, _messageBus));
     }
     _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
 
@@ -49,6 +52,10 @@ class MusicListState extends State<MusicList> {
 
     _model.songsGroupedByAlbum.forEach(_initAlbumItem);
     _albumItems.sort((a, b) => a.album.compareTo(b.album));
+
+    for (var playlist in _model.playLists) {
+      _playlistItems.add(new PlaylistItem(playlist, _messageBus));
+    }
 
     _sortMode = SortMode.TITLE;
   }
@@ -66,28 +73,35 @@ class MusicListState extends State<MusicList> {
             child: Image.asset('resources/YAMPLogoLetter.png'),
           ),
         ),
-        new Container(
-          color: Theme.of(context).primaryColor,
-          child: new Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Expanded(
-                child: _getTitleButton(),
-              ),
-              new Expanded(
-                child: _getArtistButton(),
-              ),
-              new Expanded(
-                child: _getAlbumButton(),
-              ),
-            ],
-          ),
-        ),
+        _buildHeader(),
         new Flexible(
           child: _buildList(),
         ),
       ],
+    );
+  }
+
+  Widget _buildHeader() {
+    return new Container(
+      color: Theme.of(context).primaryColor,
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Expanded(
+            child: _getTitleButton(),
+          ),
+          new Expanded(
+            child: _getArtistButton(),
+          ),
+          new Expanded(
+            child: _getAlbumButton(),
+          ),
+          new Expanded(
+            child: _getPlaylistButton(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -97,6 +111,8 @@ class MusicListState extends State<MusicList> {
         return _buildArtistList();
       case SortMode.ALBUMS:
         return _buildAlbumList();
+      case SortMode.PLAYLIST:
+        return _buildPlaylistList();
       default:
         return _buildTitleList();
     }
@@ -126,6 +142,13 @@ class MusicListState extends State<MusicList> {
     );
   }
 
+  Widget _buildPlaylistList() {
+    return new ListView.builder(
+      itemBuilder: (_, int index) => _playlistItems[index],
+      itemCount: _playlistItems.length,
+    );
+  }
+
   void onSortByTitle() {
     setState(() {
       _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
@@ -144,6 +167,13 @@ class MusicListState extends State<MusicList> {
     setState(() {
       _musicItems.sort((a, b) => a.song.album.compareTo(b.song.album));
       _sortMode = SortMode.ALBUMS;
+    });
+  }
+
+  
+  void onSortByPlaylists() {
+    setState(() {
+      _sortMode = SortMode.PLAYLIST;
     });
   }
 
@@ -195,6 +225,22 @@ class MusicListState extends State<MusicList> {
     );
   }
 
+  Widget _getPlaylistButton() {
+    Color buttonColor;
+    if (_sortMode == SortMode.PLAYLIST) {
+      buttonColor = Theme.of(context).accentColor;
+    } else {
+      buttonColor = Theme.of(context).primaryColor;
+    }
+
+    return new FlatButton(
+      color: buttonColor,
+      child: new Text('Playlists',
+          style: Theme.of(context).primaryTextTheme.button),
+      onPressed: onSortByPlaylists,
+    );
+  }
+
   void _initArtistItem(String key, List<Song> value) {
     _artistItems.add(new ArtistItem(key, value, _messageBus));
   }
@@ -208,4 +254,4 @@ class MusicListState extends State<MusicList> {
   }
 }
 
-enum SortMode { TITLE, ARTISTS, ALBUMS }
+enum SortMode { TITLE, ARTISTS, ALBUMS, PLAYLIST }
