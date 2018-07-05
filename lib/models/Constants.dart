@@ -2,6 +2,7 @@ class MessageNames{
   static const String pushMusicPlayer = "Push/MusicPlayer";
   static const String pushArtist = "Push/Artist";
   static const String pushAlbum = "Push/Album";
+  static const String pushPlaylist = "Push/Playlist";
 
   static const String modelChanged = "ModelChanged";
   static const String addToPlaylist = "Playlist/Add";

@@ -8,12 +8,12 @@ class Playlist{
 
   Playlist(this.title, this.songs);
 
-  Playlist.fromJson(Map<String, dynamic> json)
+  Playlist.fromJson(Map<String, dynamic> jsonDocument)
   {
     songs = new List<Song>();
-    title = json['title'];
+    title = jsonDocument['title'];
     
-    var songsJson = json['songs'];
+    List<dynamic> songsJson = json.decode(jsonDocument['songs']);
     if(songsJson != '[]')
     {
       for (var songJson in songsJson) {
