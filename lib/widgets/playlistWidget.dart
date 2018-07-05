@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../widgets/musicItem.dart';
 
-class PlayList extends StatelessWidget {
+class PlayListWidget extends StatelessWidget {
   final List<MusicItem> _musicItems;
   final String _title;
 
-  PlayList(this._musicItems, this._title);
+  PlayListWidget(this._musicItems, this._title);
 
   @override
   Widget build(BuildContext context) {
