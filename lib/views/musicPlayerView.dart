@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
-import '../controllers/AudioController.dart';
+import '../controllers/audioController.dart';
 import '../widgets/musicProgressBar.dart';
 
 class MusicPlayerView extends StatefulWidget {

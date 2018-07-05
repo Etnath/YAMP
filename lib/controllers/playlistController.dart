@@ -88,6 +88,15 @@ class PlaylistController {
     }
   }
 
+  ///Returns all the playlists that contain [song]
+  List<Playlist> getPlaylists(Song song) {
+    return _model.playLists.where((pl) {
+      return pl.songs.any((s) {
+        return s.path == song.path;
+      });
+    });
+  }
+
   void _subscribe() {
     _messageBus.subscribe(MessageNames.addToPlaylist, _onAddToPlaylist);
     _messageBus.subscribe(

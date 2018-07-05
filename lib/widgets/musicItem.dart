@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
 
-import '../controllers/AudioController.dart';
+import '../controllers/audioController.dart';
+import '../controllers/playlistController.dart';
 import '../models/song.dart';
 import '../models/Constants.dart';
 
 class MusicItem extends StatelessWidget {
   final Song song;
   final List<Song> _playlist;
-  final MusicChanger changeMusic;
+  final AudioController _audioController;
+  final PlaylistController _playlistController;
   final MessageBus _messageBus;
 
-  MusicItem(this.song, this._playlist, this.changeMusic, this._messageBus);
+  MusicItem(this.song, this._playlist, this._audioController,
+      this._playlistController, this._messageBus);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class MusicItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         new Container(
-          margin: const EdgeInsets.only(top: 2.0),
+          margin: const EdgeInsets.symmetric(vertical: 4.0),
           decoration: new BoxDecoration(color: Theme.of(context).cardColor),
           child: _buildTile(context),
         ),
@@ -56,7 +59,7 @@ class MusicItem extends StatelessWidget {
           ),
           new IconButton(
             onPressed: _onFavoritePressed,
-            icon: new Icon(Icons.star_border),
+            icon: _getFavoriteButton(),
           ),
           new Icon(Icons.more_vert)
         ],
@@ -65,13 +68,28 @@ class MusicItem extends StatelessWidget {
   }
 
   _handleOnTap() {
-    changeMusic(song);
+    _audioController.changeMusic(song);
     _messageBus
         .publish(new Message(MessageNames.pushMusicPlayer, data: _playlist));
   }
 
+  Widget _getFavoriteButton() {
+    var playlists = _playlistController.getPlaylists(song);
+
+    if (playlists.any((pl) {
+      return pl.title == DefaultPlaylistNames.favorites;
+    })) {
+      return new Icon(Icons.star);
+    } else {
+      return new Icon(Icons.star_border);
+    }
+  }
+
   void _onFavoritePressed() {
-    Map<String, dynamic> data = {'playlist': DefaultPlaylistNames.favorites, 'song': song};
+    Map<String, dynamic> data = {
+      'playlist': DefaultPlaylistNames.favorites,
+      'song': song
+    };
 
     _messageBus
         .publish(new Message(MessageNames.toggleSongFromPlaylist, data: data));

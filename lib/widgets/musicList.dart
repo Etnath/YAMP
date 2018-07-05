@@ -7,14 +7,16 @@ import 'albumItem.dart';
 import 'playlistItem.dart';
 import '../models/song.dart';
 import '../models/ApplicationModel.dart';
-import '../controllers/AudioController.dart';
+import '../controllers/audioController.dart';
+import '../controllers/playlistController.dart';
 
 class MusicList extends StatefulWidget {
   final ApplicationModel _model;
   final AudioController _audioController;
+  final PlaylistController _playlistController;
   final MessageBus _messageBus;
 
-  MusicList(this._model, this._audioController, this._messageBus);
+  MusicList(this._model, this._audioController, this._playlistController, this._messageBus);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,6 +27,7 @@ class MusicList extends StatefulWidget {
 class MusicListState extends State<MusicList> {
   final ApplicationModel _model;
   final AudioController _audioController;
+  final PlaylistController _playlistController;
   final MessageBus _messageBus;
 
   List<MusicItem> _musicItems;
@@ -43,7 +46,7 @@ class MusicListState extends State<MusicList> {
 
     for (var music in _model.songs) {
       _musicItems.add(new MusicItem(
-          music, _model.songs, _audioController.changeMusic, _messageBus));
+          music, _model.songs, _audioController, _playlistController, _messageBus));
     }
     _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
 

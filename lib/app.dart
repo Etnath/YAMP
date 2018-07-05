@@ -12,7 +12,7 @@ import 'widgets/playlistWidget.dart';
 import 'views/musicPlayerView.dart';
 import 'services/musicLoader.dart';
 import 'services/playlistLoader.dart';
-import 'controllers/AudioController.dart';
+import 'controllers/audioController.dart';
 import 'controllers/playlistController.dart';
 import 'models/Constants.dart';
 import 'models/playlist.dart';
@@ -43,7 +43,7 @@ class YampAppState extends State<YampApp> {
 
     _audioController = new AudioController(_model, _messageBus);
     _playlistController = new PlaylistController(_model, _messageBus);
-    
+
     viewDisplayed();
   }
 
@@ -144,7 +144,7 @@ class YampAppState extends State<YampApp> {
     } else {
       return new WillPopScope(
         onWillPop: onWillPop,
-        child: new MusicList(_model, _audioController, _messageBus),
+        child: new MusicList(_model, _audioController, _playlistController, _messageBus),
       );
     }
   }
@@ -169,7 +169,7 @@ class YampAppState extends State<YampApp> {
     var musicItems = new List<MusicItem>();
     for (var song in songs) {
       musicItems.add(new MusicItem(
-          song, songs, _audioController.changeMusic, _messageBus));
+          song, songs, _audioController, _playlistController, _messageBus));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
@@ -184,7 +184,7 @@ class YampAppState extends State<YampApp> {
     var musicItems = new List<MusicItem>();
     for (var song in songs) {
       musicItems.add(new MusicItem(
-          song, songs, _audioController.changeMusic, _messageBus));
+          song, songs, _audioController, _playlistController, _messageBus));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
@@ -197,7 +197,7 @@ class YampAppState extends State<YampApp> {
     var musicItems = new List<MusicItem>();
     for (var song in playList.songs) {
       musicItems.add(new MusicItem(
-          song, playList.songs, _audioController.changeMusic, _messageBus));
+          song, playList.songs, _audioController, _playlistController, _messageBus));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
