@@ -20,13 +20,11 @@ class AudioController {
   AudioPlayer _audioPlayer;
   MessageBus _messageBus;
   Duration _currentSongDuration;
-  PlaylistLoader _playlistLoader;
 
   AudioController(this._model, this._messageBus) {
     _audioPlayer = new AudioPlayer();
     _currentSongDuration = new Duration();
-    _playlistLoader = new PlaylistLoader();
-
+    
     _subscribe();
   }
 
@@ -125,76 +123,7 @@ class AudioController {
     _audioPlayer.seek(seconds);
   }
 
-  void _onAddToPlaylist(Message message) {
-    Map<String, dynamic> data = message.data;
-    String playlistName = data['playlist'];
-    Song song = data['song'];
-
-    _initPlaylistIfRequired(playlistName);
-
-    var playlist = _model.playLists.firstWhere((pl) {
-      return pl.title == playlistName;
-    });
-    if (!playlist.songs.any((s) {
-      return s.path == song.path;
-    })) {
-      playlist.songs.add(song);
-    }
-
-    _playlistLoader.savePlaylist(_model.playLists);
-  }
-
-  void _onRemoveFromPlaylist(Message message) {
-    Map<String, dynamic> data = message.data;
-    String playlistName = data['playlist'];
-    Song song = data['song'];
-
-    _initPlaylistIfRequired(playlistName);
-
-    var playlist = _model.playLists.firstWhere((pl) {
-      return pl.title == playlistName;
-    });
-    if (playlist.songs.any((s) {
-      return s.path == song.path;
-    })) {
-      playlist.songs.removeWhere((s) {
-        return s.path == song.path;
-      });
-    }
-
-    _playlistLoader.savePlaylist(_model.playLists);
-  }
-
-  void _onToggleFromPlaylist(Message message) {
-    Map<String, dynamic> data = message.data;
-    String playlistName = data['playlist'];
-    Song song = data['song'];
-
-    _initPlaylistIfRequired(playlistName);
-
-    var playlist = _model.playLists.firstWhere((pl) {
-      return pl.title == playlistName;
-    });
-    if (playlist.songs.any((s) {
-      return s.path == song.path;
-    })) {
-      playlist.songs.removeWhere((s) {
-        return s.path == song.path;
-      });
-    } else {
-      playlist.songs.add(song);
-    }
-
-    _playlistLoader.savePlaylist(_model.playLists);
-  }
-
-  void _initPlaylistIfRequired(String playlistName) {
-    if (!_model.playLists.any((pl) {
-      return pl.title == playlistName;
-    })) {
-      _model.playLists.add(new Playlist(playlistName, new List<Song>()));
-    }
-  }
+  
 
   void dispose() {
     _audioPlayer.stop();
@@ -205,10 +134,6 @@ class AudioController {
     _audioPlayer.onAudioPositionChanged.listen(onAudioPositionChanged);
 
     _messageBus.subscribe(MessageNames.musicSeek, onSeekRequest);
-    _messageBus.subscribe(MessageNames.addToPlaylist, _onAddToPlaylist);
-    _messageBus.subscribe(
-        MessageNames.removeFromPlaylist, _onRemoveFromPlaylist);
-    _messageBus.subscribe(
-        MessageNames.toggleSongFromPlaylist, _onToggleFromPlaylist);
+    
   }
 }

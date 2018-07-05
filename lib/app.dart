@@ -13,6 +13,7 @@ import 'views/musicPlayerView.dart';
 import 'services/musicLoader.dart';
 import 'services/playlistLoader.dart';
 import 'controllers/AudioController.dart';
+import 'controllers/playlistController.dart';
 import 'models/Constants.dart';
 import 'models/playlist.dart';
 
@@ -27,6 +28,7 @@ class YampAppState extends State<YampApp> {
   BuildContext _context;
   ApplicationModel _model;
   AudioController _audioController;
+  PlaylistController _playlistController;
   MessageBus _messageBus;
   Stopwatch _stopwatch;
 
@@ -40,6 +42,8 @@ class YampAppState extends State<YampApp> {
     _subscribe();
 
     _audioController = new AudioController(_model, _messageBus);
+    _playlistController = new PlaylistController(_model, _messageBus);
+    
     viewDisplayed();
   }
 
