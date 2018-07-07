@@ -9,7 +9,7 @@ import 'widgets/splashScreen.dart';
 import 'widgets/musicItem.dart';
 import 'widgets/musicList.dart';
 import 'widgets/playlistWidget.dart';
-import 'views/musicPlayerView.dart';
+import 'widgets/musicPlayerWidget.dart';
 import 'services/musicLoader.dart';
 import 'services/playlistLoader.dart';
 import 'controllers/audioController.dart';
@@ -132,7 +132,7 @@ class YampAppState extends State<YampApp> {
       ),
       routes: <String, WidgetBuilder>{
         "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerView(_model, _audioController, _messageBus)
+            new MusicPlayerWidget(_model, _audioController, _messageBus)
       },
     );
   }

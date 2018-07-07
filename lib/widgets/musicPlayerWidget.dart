@@ -5,12 +5,12 @@ import '../models/ApplicationModel.dart';
 import '../controllers/audioController.dart';
 import '../widgets/musicProgressBar.dart';
 
-class MusicPlayerView extends StatefulWidget {
+class MusicPlayerWidget extends StatefulWidget {
   final ApplicationModel _model;
   final AudioController _controller;
   final MessageBus _messageBus;
 
-  MusicPlayerView(this._model, this._controller, this._messageBus);
+  MusicPlayerWidget(this._model, this._controller, this._messageBus);
 
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +18,7 @@ class MusicPlayerView extends StatefulWidget {
   }
 }
 
-class MusicPlayerState extends State<MusicPlayerView> {
+class MusicPlayerState extends State<MusicPlayerWidget> {
   ApplicationModel _model;
   final AudioController _controller;
   final MessageBus _messageBus; 
