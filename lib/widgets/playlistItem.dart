@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
 
-import '../models/song.dart';
 import '../models/playlist.dart';
 import '../models/constants.dart';
 

@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dart_tags/dart_tags.dart';
 
 import '../models/song.dart';
-import '../models/playlist.dart';
 import '../models/constants.dart';
 
 class MusicLoader {

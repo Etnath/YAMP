@@ -5,8 +5,6 @@ import 'package:dart_message_bus/dart_message_bus.dart';
 import '../models/ApplicationModel.dart';
 import '../models/song.dart';
 import '../models/constants.dart';
-import '../models/playlist.dart';
-import '../services/playlistLoader.dart';
 
 typedef MusicChanger(Song song);
 typedef MusicPlay();
@@ -24,7 +22,7 @@ class AudioController {
   AudioController(this._model, this._messageBus) {
     _audioPlayer = new AudioPlayer();
     _currentSongDuration = new Duration();
-    
+
     _subscribe();
   }
 
