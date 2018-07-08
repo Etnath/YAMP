@@ -95,7 +95,7 @@ class MusicItemState extends State<MusicItem> {
               return _playlistNames.map((String playlist) {
                 return PopupMenuItem<String>(
                   value: playlist,
-                  child: Text(playlist),
+                  child: _getPlaylistPopuItemContent(context, playlist),
                 );
               }).toList();
             },
@@ -128,6 +128,41 @@ class MusicItemState extends State<MusicItem> {
         onPressed: _onFavoritePressed,
         icon: new Icon(Icons.star_border),
       );
+    }
+  }
+
+  Widget _getPlaylistPopuItemContent(BuildContext context, String playlist)
+  {
+    if(playlist == 'Create Playlist'){
+      return Text(playlist);
+    } else {
+    var playlists = _playlistController.getPlaylists(song);
+
+    if(playlists.any((pl) { return pl.title == playlist;})){
+      return Row(
+        children: [
+          Icon(Icons.star, color: Theme.of(context).accentColor,),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 8.0),
+              child: Text(playlist),
+            ) 
+          ),         
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Icon(Icons.star_border),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 8.0),
+              child: Text(playlist),
+            ) 
+          ),         
+        ],
+      );
+    }
     }
   }
 
