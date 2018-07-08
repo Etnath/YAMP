@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter/material.dart';
 
-import '../models/playlist.dart';
 import '../models/constants.dart';
+import '../models/playlist.dart';
 import 'deletePlaylistDialog.dart';
 
 class PlaylistItem extends StatefulWidget {

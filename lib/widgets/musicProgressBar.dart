@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter/material.dart';
+
 import '../models/constants.dart';
 
 class MusicProgressBar extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter/material.dart';
 
-import 'createPlaylistDialog.dart';
 import '../controllers/audioController.dart';
 import '../controllers/playlistController.dart';
-import '../models/song.dart';
 import '../models/Constants.dart';
+import '../models/song.dart';
+import 'createPlaylistDialog.dart';
 
 class MusicItem extends StatefulWidget {
   final Song song;

@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter/material.dart';
 
-import 'models/ApplicationModel.dart';
-import 'models/song.dart';
-import 'widgets/splashScreen.dart';
-import 'widgets/musicItem.dart';
-import 'widgets/musicList.dart';
-import 'widgets/playlistWidget.dart';
-import 'widgets/musicPlayerWidget.dart';
-import 'services/musicLoader.dart';
-import 'services/playlistLoader.dart';
 import 'controllers/audioController.dart';
 import 'controllers/playlistController.dart';
+import 'models/ApplicationModel.dart';
 import 'models/Constants.dart';
 import 'models/playlist.dart';
+import 'models/song.dart';
+import 'services/musicLoader.dart';
+import 'services/playlistLoader.dart';
+import 'widgets/musicItem.dart';
+import 'widgets/musicList.dart';
+import 'widgets/musicPlayerWidget.dart';
+import 'widgets/playlistWidget.dart';
+import 'widgets/splashScreen.dart';
 
 class YampApp extends StatefulWidget {
   @override

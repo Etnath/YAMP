@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/services.dart';
-
-import 'package:path_provider/path_provider.dart';
 import 'package:dart_tags/dart_tags.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
-import '../models/song.dart';
 import '../models/constants.dart';
+import '../models/song.dart';
 
 class MusicLoader {
   static const _methodChannel = const MethodChannel('read');

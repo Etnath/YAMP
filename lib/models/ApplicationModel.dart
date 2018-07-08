@@ -1,7 +1,6 @@
-import 'song.dart';
-import 'playlist.dart';
-
 import '../utilities/helper.dart';
+import 'playlist.dart';
+import 'song.dart';
 
 class ApplicationModel {
   bool isLoading;

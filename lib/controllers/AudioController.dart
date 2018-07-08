@@ -1,10 +1,11 @@
-import 'package:audioplayer/audioplayer.dart';
 import 'dart:math';
+
+import 'package:audioplayer/audioplayer.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
-import '../models/song.dart';
 import '../models/constants.dart';
+import '../models/song.dart';
 
 typedef MusicChanger(Song song);
 typedef MusicPlay();

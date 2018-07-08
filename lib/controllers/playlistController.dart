@@ -1,9 +1,9 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 
 import '../models/ApplicationModel.dart';
-import '../models/song.dart';
 import '../models/constants.dart';
 import '../models/playlist.dart';
+import '../models/song.dart';
 import '../services/playlistLoader.dart';
 
 class PlaylistController {

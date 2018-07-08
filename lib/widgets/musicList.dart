@@ -1,15 +1,15 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
 
-import 'musicItem.dart';
-import 'artistItem.dart';
-import 'albumItem.dart';
-import 'playlistItem.dart';
-import '../models/song.dart';
-import '../models/ApplicationModel.dart';
 import '../controllers/audioController.dart';
 import '../controllers/playlistController.dart';
+import '../models/ApplicationModel.dart';
 import '../models/constants.dart';
+import '../models/song.dart';
+import 'albumItem.dart';
+import 'artistItem.dart';
+import 'musicItem.dart';
+import 'playlistItem.dart';
 
 class MusicList extends StatefulWidget {
   final ApplicationModel _model;
