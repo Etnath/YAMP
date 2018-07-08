@@ -9,6 +9,7 @@ import '../models/song.dart';
 import '../models/ApplicationModel.dart';
 import '../controllers/audioController.dart';
 import '../controllers/playlistController.dart';
+import '../models/constants.dart';
 
 class MusicList extends StatefulWidget {
   final ApplicationModel _model;
@@ -20,7 +21,7 @@ class MusicList extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return MusicListState(this._model, this._audioController, this._messageBus);
+    return MusicListState(this._model, this._audioController, this._playlistController, this._messageBus);
   }
 }
 
@@ -36,31 +37,41 @@ class MusicListState extends State<MusicList> {
   List<PlaylistItem> _playlistItems;
   SortMode _sortMode;
 
-  MusicListState(this._model, this._audioController, this._messageBus) {
+  MusicListState(this._model, this._audioController, this._playlistController, this._messageBus) {
     _musicItems = new List<MusicItem>();
     _artistItems = new List<ArtistItem>();
     _albumItems = new List<AlbumItem>();
     _playlistItems = new List<PlaylistItem>();
 
-    _model.songs.sort((a, b) => a.name.compareTo(b.name));
+    _initLists();
 
+    _messageBus.subscribe(MessageNames.modelChanged, onModelChanged);
+    _sortMode = SortMode.TITLE;
+  }
+
+  void _initLists() {
+    _musicItems.clear();
+    _artistItems.clear();
+    _albumItems.clear();
+    _playlistItems.clear();
+    
+    _model.songs.sort((a, b) => a.name.compareTo(b.name));
+    
     for (var music in _model.songs) {
       _musicItems.add(new MusicItem(
           music, _model.songs, _audioController, _playlistController, _messageBus));
     }
     _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
-
+    
     _model.songsGroupedBySinger.forEach(_initArtistItem);
     _artistItems.sort((a, b) => a.artist.compareTo(b.artist));
-
+    
     _model.songsGroupedByAlbum.forEach(_initAlbumItem);
     _albumItems.sort((a, b) => a.album.compareTo(b.album));
-
+    
     for (var playlist in _model.playLists) {
       _playlistItems.add(new PlaylistItem(playlist, _messageBus));
     }
-
-    _sortMode = SortMode.TITLE;
   }
 
   @override
@@ -254,6 +265,14 @@ class MusicListState extends State<MusicList> {
 
   void onListTap() {
     _model.currentPlaylist = _model.songs;
+  }
+
+  void onModelChanged(Message message) {
+    if (mounted) {
+      setState(() {
+        _initLists();
+      });
+    }
   }
 }
 

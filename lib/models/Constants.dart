@@ -8,6 +8,8 @@ class MessageNames{
   static const String addToPlaylist = "Playlist/Add";
   static const String removeFromPlaylist = "Playlist/Remove";
   static const String toggleSongFromPlaylist = "Playlist/Toggle";
+  static const String createPlaylist = "Playlist/Create";
+  static const String deletePlaylist = "Playlist/Delete";
 
   static const String musicSeek = "Music/Seek";
 }
