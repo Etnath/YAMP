@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 import '../models/constants.dart';
 
-class CreatePlaylistDialog extends StatelessWidget {
+class DeletePlaylistDialog extends StatelessWidget {
   final MessageBus _messageBus;
-  final TextEditingController controller = new TextEditingController();
+  final String _playlistName;
 
-  CreatePlaylistDialog(this._messageBus);
+  DeletePlaylistDialog(this._messageBus, this._playlistName);
 
   @override
   Widget build(BuildContext context) {
     return new AlertDialog(
       title: new Text(
-        'Create Playlist',
+        'Delete Playlist',
         style: new TextStyle(
           color: Theme.of(context).primaryColor,
         ),
@@ -21,18 +21,16 @@ class CreatePlaylistDialog extends StatelessWidget {
       content: new SingleChildScrollView(
         child: new ListBody(
           children: <Widget>[
-            new TextField(controller: controller),
+            new Text('Are you sure you want to delete ' + _playlistName + '?'),
           ],
         ),
       ),
       actions: <Widget>[
         new FlatButton(
-          child: new Text('Create'),
+          child: new Text('Delete'),
           onPressed: () {
-            if (controller.text.length > 0) {
-              _messageBus.publish(new Message(MessageNames.createPlaylist,
-                  data: controller.text));
-            }
+              _messageBus.publish(new Message(MessageNames.deletePlaylist,
+                  data: _playlistName));
 
             Navigator.of(context).pop();
           },

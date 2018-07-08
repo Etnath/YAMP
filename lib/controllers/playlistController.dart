@@ -30,9 +30,20 @@ class PlaylistController {
     }
   }
 
-  void _editPlaylist(Message message) {}
+  void _deletePlaylist(Message message) {
+    String playlistName = message.data;
 
-  void _deletePlaylist(Message message) {}
+    if (_model.playLists.any((pl) {
+      return pl.title == playlistName;
+    })) {
+      _model.playLists.removeWhere((pl) {
+        return pl.title == playlistName;
+      });
+
+      _messageBus.publish(new Message("ModelChanged"));
+      _playlistLoader.savePlaylist(_model.playLists);
+    }
+  }
 
   void _onAddToPlaylist(Message message) {
     Map<String, dynamic> data = message.data;
@@ -126,6 +137,7 @@ class PlaylistController {
 
   void _subscribe() {
     _messageBus.subscribe(MessageNames.createPlaylist, _createPlaylist);
+    _messageBus.subscribe(MessageNames.deletePlaylist, _deletePlaylist);
     _messageBus.subscribe(MessageNames.addToPlaylist, _onAddToPlaylist);
     _messageBus.subscribe(
         MessageNames.removeFromPlaylist, _onRemoveFromPlaylist);
