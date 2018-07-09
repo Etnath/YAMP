@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../models/constants.dart';
 import '../models/playlist.dart';
@@ -9,21 +10,20 @@ import 'deletePlaylistDialog.dart';
 
 class PlaylistItem extends StatefulWidget {
   final Playlist _playlist;
-  final MessageBus _messageBus;
 
-  PlaylistItem(this._playlist, this._messageBus);
+  PlaylistItem(this._playlist);
 
   @override
   State<StatefulWidget> createState() {
-    return new PlaylistState(this._playlist, this._messageBus);
+    return new PlaylistState(this._playlist);
   }
 }
 
 class PlaylistState extends State<PlaylistItem> {
   Playlist _playlist;
-  final MessageBus _messageBus;
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
-  PlaylistState(this._playlist, this._messageBus) {
+  PlaylistState(this._playlist) {
     _messageBus.subscribe(MessageNames.modelChanged, onModelChanged);
   }
 
@@ -90,7 +90,7 @@ class PlaylistState extends State<PlaylistItem> {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return new DeletePlaylistDialog(_messageBus, _playlist.title);
+        return new DeletePlaylistDialog(_playlist.title);
       },
     );
   }

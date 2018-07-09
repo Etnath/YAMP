@@ -1,16 +1,16 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../models/constants.dart';
 
 class MusicProgressBar extends StatefulWidget {
-  final MessageBus _messageBus;
 
-  MusicProgressBar(this._messageBus);
+  MusicProgressBar();
 
   @override
   State<StatefulWidget> createState() {
-    return MusicProgressBarState(this._messageBus);
+    return MusicProgressBarState();
   }
 }
 
@@ -19,9 +19,9 @@ class MusicProgressBarState extends State<MusicProgressBar> {
   Duration _currentSongLength; //in s
   double _progress = 0.0;
   String _progressText;
-  MessageBus _messageBus;
+  MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
-  MusicProgressBarState(this._messageBus) {
+  MusicProgressBarState() {
     _currentSongPosition = new Duration();
     _currentSongLength = new Duration();
     _progressText = "-- / --";

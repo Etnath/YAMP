@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import 'controllers/audioController.dart';
 import 'controllers/playlistController.dart';
-import 'models/ApplicationModel.dart';
+import 'models/applicationModel.dart';
 import 'models/Constants.dart';
 import 'models/playlist.dart';
 import 'models/song.dart';
@@ -26,23 +27,17 @@ class YampApp extends StatefulWidget {
 
 class YampAppState extends State<YampApp> {
   BuildContext _context;
-  ApplicationModel _model;
-  AudioController _audioController;
-  PlaylistController _playlistController;
-  MessageBus _messageBus;
+  ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
+  AudioController _audioController = Injector.getInjector().get<AudioController>();
+  MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
   Stopwatch _stopwatch;
 
   @override
   void initState() {
     super.initState();
     _stopwatch = new Stopwatch();
-    _model = new ApplicationModel();
-    _messageBus = new MessageBus();
-
+    
     _subscribe();
-
-    _audioController = new AudioController(_model, _messageBus);
-    _playlistController = new PlaylistController(_model, _messageBus);
 
     viewDisplayed();
   }
@@ -131,8 +126,7 @@ class YampAppState extends State<YampApp> {
         }),
       ),
       routes: <String, WidgetBuilder>{
-        "/MusicPlayer": (BuildContext context) =>
-            new MusicPlayerWidget(_model, _audioController, _messageBus)
+        "/MusicPlayer": (BuildContext context) => new MusicPlayerWidget()
       },
     );
   }
@@ -144,7 +138,7 @@ class YampAppState extends State<YampApp> {
     } else {
       return new WillPopScope(
         onWillPop: onWillPop,
-        child: new MusicList(_model, _audioController, _playlistController, _messageBus),
+        child: new MusicList(),
       );
     }
   }
@@ -168,8 +162,7 @@ class YampAppState extends State<YampApp> {
 
     var musicItems = new List<MusicItem>();
     for (var song in songs) {
-      musicItems.add(new MusicItem(
-          song, songs, _audioController, _playlistController, _messageBus));
+      musicItems.add(new MusicItem(song, songs));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
@@ -183,8 +176,7 @@ class YampAppState extends State<YampApp> {
 
     var musicItems = new List<MusicItem>();
     for (var song in songs) {
-      musicItems.add(new MusicItem(
-          song, songs, _audioController, _playlistController, _messageBus));
+      musicItems.add(new MusicItem(song, songs));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(
@@ -196,8 +188,7 @@ class YampAppState extends State<YampApp> {
 
     var musicItems = new List<MusicItem>();
     for (var song in playList.songs) {
-      musicItems.add(new MusicItem(
-          song, playList.songs, _audioController, _playlistController, _messageBus));
+      musicItems.add(new MusicItem(song, playList.songs));
     }
 
     Navigator.of(_context).push(new MaterialPageRoute(

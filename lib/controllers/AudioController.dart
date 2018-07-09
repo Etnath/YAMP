@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:audioplayer/audioplayer.dart';
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
-import '../models/ApplicationModel.dart';
+import '../models/applicationModel.dart';
 import '../models/constants.dart';
 import '../models/song.dart';
 
@@ -15,12 +16,12 @@ typedef EnableShuffle();
 typedef EnableRepeat();
 
 class AudioController {
-  ApplicationModel _model;
+  ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
   AudioPlayer _audioPlayer;
-  MessageBus _messageBus;
+  MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
   Duration _currentSongDuration;
 
-  AudioController(this._model, this._messageBus) {
+  AudioController() {
     _audioPlayer = new AudioPlayer();
     _currentSongDuration = new Duration();
 

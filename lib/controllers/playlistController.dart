@@ -1,19 +1,18 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
-import '../models/ApplicationModel.dart';
+import '../models/applicationModel.dart';
 import '../models/constants.dart';
 import '../models/playlist.dart';
 import '../models/song.dart';
 import '../services/playlistLoader.dart';
 
 class PlaylistController {
-  ApplicationModel _model;
-  MessageBus _messageBus;
-  PlaylistLoader _playlistLoader;
+  ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
+  MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
+  PlaylistLoader _playlistLoader = Injector.getInjector().get<PlaylistLoader>();
 
-  PlaylistController(this._model, this._messageBus) {
-    _playlistLoader = new PlaylistLoader();
-
+  PlaylistController() {
     _subscribe();
   }
 

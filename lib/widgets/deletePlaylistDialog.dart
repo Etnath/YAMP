@@ -1,13 +1,14 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../models/constants.dart';
 
 class DeletePlaylistDialog extends StatelessWidget {
-  final MessageBus _messageBus;
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
   final String _playlistName;
 
-  DeletePlaylistDialog(this._messageBus, this._playlistName);
+  DeletePlaylistDialog(this._playlistName);
 
   @override
   Widget build(BuildContext context) {

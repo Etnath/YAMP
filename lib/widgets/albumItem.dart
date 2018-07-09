@@ -1,14 +1,15 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../models/song.dart';
 
 class AlbumItem extends StatelessWidget {
   final String album;
   final List<Song> _songs;
-  final MessageBus _messageBus;
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
-  AlbumItem(this.album, this._songs, this._messageBus);
+  AlbumItem(this.album, this._songs);
 
   @override
   Widget build(BuildContext context) {

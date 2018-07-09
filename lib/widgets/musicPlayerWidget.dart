@@ -1,29 +1,27 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../controllers/audioController.dart';
-import '../models/ApplicationModel.dart';
+import '../models/applicationModel.dart';
 import '../widgets/musicProgressBar.dart';
 
 class MusicPlayerWidget extends StatefulWidget {
-  final ApplicationModel _model;
-  final AudioController _controller;
-  final MessageBus _messageBus;
 
-  MusicPlayerWidget(this._model, this._controller, this._messageBus);
+  MusicPlayerWidget();
 
   @override
   State<StatefulWidget> createState() {
-    return MusicPlayerState(_model, this._controller, this._messageBus);
+    return MusicPlayerState();
   }
 }
 
 class MusicPlayerState extends State<MusicPlayerWidget> {
-  ApplicationModel _model;
-  final AudioController _controller;
-  final MessageBus _messageBus; 
+  ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
+  final AudioController _controller = Injector.getInjector().get<AudioController>();
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>(); 
 
-  MusicPlayerState(this._model, this._controller, this._messageBus);
+  MusicPlayerState();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,7 @@ class MusicPlayerState extends State<MusicPlayerWidget> {
               ),
             ),
           ),
-          new MusicProgressBar(_messageBus),
+          new MusicProgressBar(),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: new Container(

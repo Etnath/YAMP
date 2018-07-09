@@ -1,9 +1,10 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../controllers/audioController.dart';
 import '../controllers/playlistController.dart';
-import '../models/ApplicationModel.dart';
+import '../models/applicationModel.dart';
 import '../models/constants.dart';
 import '../models/song.dart';
 import 'albumItem.dart';
@@ -12,24 +13,20 @@ import 'musicItem.dart';
 import 'playlistItem.dart';
 
 class MusicList extends StatefulWidget {
-  final ApplicationModel _model;
-  final AudioController _audioController;
-  final PlaylistController _playlistController;
-  final MessageBus _messageBus;
 
-  MusicList(this._model, this._audioController, this._playlistController, this._messageBus);
+  MusicList();
 
   @override
   State<StatefulWidget> createState() {
-    return MusicListState(this._model, this._audioController, this._playlistController, this._messageBus);
+    return MusicListState();
   }
 }
 
 class MusicListState extends State<MusicList> {
-  final ApplicationModel _model;
-  final AudioController _audioController;
-  final PlaylistController _playlistController;
-  final MessageBus _messageBus;
+  final ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
+  final AudioController _audioController = Injector.getInjector().get<AudioController>();
+  final PlaylistController _playlistController = Injector.getInjector().get<PlaylistController>();
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
   List<MusicItem> _musicItems;
   List<ArtistItem> _artistItems;
@@ -37,7 +34,7 @@ class MusicListState extends State<MusicList> {
   List<PlaylistItem> _playlistItems;
   SortMode _sortMode;
 
-  MusicListState(this._model, this._audioController, this._playlistController, this._messageBus) {
+  MusicListState() {
     _musicItems = new List<MusicItem>();
     _artistItems = new List<ArtistItem>();
     _albumItems = new List<AlbumItem>();
@@ -59,7 +56,7 @@ class MusicListState extends State<MusicList> {
     
     for (var music in _model.songs) {
       _musicItems.add(new MusicItem(
-          music, _model.songs, _audioController, _playlistController, _messageBus));
+          music, _model.songs));
     }
     _musicItems.sort((a, b) => a.song.name.compareTo(b.song.name));
     
@@ -70,7 +67,7 @@ class MusicListState extends State<MusicList> {
     _albumItems.sort((a, b) => a.album.compareTo(b.album));
     
     for (var playlist in _model.playLists) {
-      _playlistItems.add(new PlaylistItem(playlist, _messageBus));
+      _playlistItems.add(new PlaylistItem(playlist));
     }
   }
 
@@ -256,11 +253,11 @@ class MusicListState extends State<MusicList> {
   }
 
   void _initArtistItem(String key, List<Song> value) {
-    _artistItems.add(new ArtistItem(key, value, _messageBus));
+    _artistItems.add(new ArtistItem(key, value));
   }
 
   void _initAlbumItem(String key, List<Song> value) {
-    _albumItems.add(new AlbumItem(key, value, _messageBus));
+    _albumItems.add(new AlbumItem(key, value));
   }
 
   void onListTap() {

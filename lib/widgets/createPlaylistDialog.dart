@@ -1,13 +1,14 @@
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../models/constants.dart';
 
 class CreatePlaylistDialog extends StatelessWidget {
-  final MessageBus _messageBus;
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
   final TextEditingController controller = new TextEditingController();
 
-  CreatePlaylistDialog(this._messageBus);
+  CreatePlaylistDialog();
 
   @override
   Widget build(BuildContext context) {

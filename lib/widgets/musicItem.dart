@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import '../controllers/audioController.dart';
 import '../controllers/playlistController.dart';
@@ -12,31 +13,26 @@ import 'createPlaylistDialog.dart';
 class MusicItem extends StatefulWidget {
   final Song song;
   final List<Song> _playlist;
-  final AudioController _audioController;
-  final PlaylistController _playlistController;
-  final MessageBus _messageBus;
+  
 
-  MusicItem(this.song, this._playlist, this._audioController,
-      this._playlistController, this._messageBus);
+  MusicItem(this.song, this._playlist);
 
   @override
   State<StatefulWidget> createState() {
-    return new MusicItemState(this.song, this._playlist, this._audioController,
-        this._playlistController, this._messageBus);
+    return new MusicItemState(this.song, this._playlist);
   }
 }
 
 class MusicItemState extends State<MusicItem> {
   Song song;
   final List<Song> _playlist;
-  final AudioController _audioController;
-  final PlaylistController _playlistController;
-  final MessageBus _messageBus;
+  final AudioController _audioController = Injector.getInjector().get<AudioController>();
+  final PlaylistController _playlistController = Injector.getInjector().get<PlaylistController>();
+  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
   List<String> _playlistNames;
 
-  MusicItemState(this.song, this._playlist, this._audioController,
-      this._playlistController, this._messageBus) {
+  MusicItemState(this.song, this._playlist) {
     _initPlaylistNames();
     _messageBus.subscribe(MessageNames.modelChanged, onModelChanged);
   }
@@ -171,7 +167,7 @@ class MusicItemState extends State<MusicItem> {
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
-      return new CreatePlaylistDialog(_messageBus);
+      return new CreatePlaylistDialog();
     },
   );
 }
