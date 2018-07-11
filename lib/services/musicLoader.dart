@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:dart_tags/dart_tags.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/constants.dart';
@@ -13,10 +15,16 @@ class MusicLoader {
   static const _methodChannel = const MethodChannel('read');
 
   TagProcessor _tp;
+  MessageBus _messageBus;
   List<Song> _cachedSongs;
+  int _musicTotal;
+  int _musicLoaded;
 
   MusicLoader() {
     _tp = new TagProcessor();
+    _messageBus = Injector.getInjector().get<MessageBus>();
+    _musicLoaded = 0;
+    _musicTotal = 0;
   }
 
   Future<PermissionState> canReadExternalStorage() async {
@@ -32,9 +40,12 @@ class MusicLoader {
   Future<List<Song>> loadMusic() async {
     Directory root = await getExternalStorageDirectory();
     var musicPath = root.path + "/Music";
-    
+
     Directory musicDirectory = new Directory(musicPath);
     var fileList = musicDirectory.listSync(recursive: true);
+
+    _musicTotal = fileList.length;
+    _notifyMusicLoaded();
 
     loadCachedSongs();
 
@@ -45,6 +56,8 @@ class MusicLoader {
         Song music = await createMusic(file.path);
         musics.add(music);
       }
+      _musicLoaded++;
+      _notifyMusicLoaded();
     }
 
     saveCachedSongs();
@@ -134,6 +147,12 @@ class MusicLoader {
         'Unknown', 'Unknown');
     _cachedSongs.add(song);
     return song;
+  }
+
+  void _notifyMusicLoaded() {
+    Map<String, dynamic> data = {'total': _musicTotal, 'loaded': _musicLoaded};
+
+    _messageBus.publish(new Message(MessageNames.musicLoading, data: data));
   }
 }
 

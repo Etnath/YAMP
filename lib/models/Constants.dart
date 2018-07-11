@@ -12,6 +12,7 @@ class MessageNames{
   static const String deletePlaylist = "Playlist/Delete";
 
   static const String musicSeek = "Music/Seek";
+  static const String musicLoading = "Music/Loading";
 }
 
 class LocalPath{

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 
 import 'controllers/audioController.dart';
-import 'controllers/playlistController.dart';
 import 'models/applicationModel.dart';
 import 'models/Constants.dart';
 import 'models/playlist.dart';
@@ -28,7 +27,8 @@ class YampApp extends StatefulWidget {
 class YampAppState extends State<YampApp> {
   BuildContext _context;
   ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
-  AudioController _audioController = Injector.getInjector().get<AudioController>();
+  AudioController _audioController =
+      Injector.getInjector().get<AudioController>();
   MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
   Stopwatch _stopwatch;
 
@@ -36,7 +36,7 @@ class YampAppState extends State<YampApp> {
   void initState() {
     super.initState();
     _stopwatch = new Stopwatch();
-    
+
     _subscribe();
 
     viewDisplayed();
@@ -56,7 +56,7 @@ class YampAppState extends State<YampApp> {
 
             if (_stopwatch.elapsedMilliseconds < 3000) {
               //We wait to let a chance to the splashscreen to be displayed. To be refactored later
-              Future.delayed(const Duration(milliseconds: 500)).then((dynamic) {
+              Future.delayed(const Duration(milliseconds: 300)).then((dynamic) {
                 setState(() {
                   _model.isLoading = false;
                 });

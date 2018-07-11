@@ -1,4 +1,3 @@
-import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 
@@ -19,7 +18,6 @@ class MusicPlayerWidget extends StatefulWidget {
 class MusicPlayerState extends State<MusicPlayerWidget> {
   ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
   final AudioController _controller = Injector.getInjector().get<AudioController>();
-  final MessageBus _messageBus = Injector.getInjector().get<MessageBus>(); 
 
   MusicPlayerState();
 

@@ -2,8 +2,6 @@ import 'package:dart_message_bus/dart_message_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 
-import '../controllers/audioController.dart';
-import '../controllers/playlistController.dart';
 import '../models/applicationModel.dart';
 import '../models/constants.dart';
 import '../models/song.dart';
@@ -24,8 +22,6 @@ class MusicList extends StatefulWidget {
 
 class MusicListState extends State<MusicList> {
   final ApplicationModel _model = Injector.getInjector().get<ApplicationModel>();
-  final AudioController _audioController = Injector.getInjector().get<AudioController>();
-  final PlaylistController _playlistController = Injector.getInjector().get<PlaylistController>();
   final MessageBus _messageBus = Injector.getInjector().get<MessageBus>();
 
   List<MusicItem> _musicItems;
