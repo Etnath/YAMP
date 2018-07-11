@@ -1,8 +1,8 @@
-# YAMP
+# <img src="./resources/YAMPLogoLetter.png" height="35" /> YAMP - Yet Another Music Player
 
-Yet Another Music Player. A simple local music player. No ads, no paywall, no data collected.
+A simple local music player. No ads, no paywall, no data collected.
 
-<img src="./resources/YAMPLogoLetter.png" height="50" />
+<img src="./resources/screenshots.png" height="350" />
 
 Powered by Flutter.
 
